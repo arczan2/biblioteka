@@ -13,12 +13,17 @@ Następinie tworzymy wirtualne środowkisko za pomocą programu virtualenv:
 cd biblioteka
 virtualenv venv
 ```
-Aktywacji środowisko dokonujemy komendą:
+Aktywacji środowiska pod linuxem dokonujemy komendą:
 ```bash
 source venv/bin/activate
 ```
-Po aktywacji virtualenv'a musimy dokonać migracji bazy danych:
+albo pod Windowsem:
+```
+.\venv\Scripts\activate
+```
+Po aktywacji virtualenv'a musimy zainstalować wymagane moduły pythona oraz dokonać migracji bazy danych:
 ```bash
+pip install -r requirements.txt
 python3 manage.py migrate
 ```
 Ostatnim krokiem jest uruchomienie serwera deweloperskiego:
@@ -26,3 +31,8 @@ Ostatnim krokiem jest uruchomienie serwera deweloperskiego:
 python3 manage.py runserver
 ```
 Gdy wykonamy wszystkie kroki aplikacja jest dostępna pod adresem **localhost:8000**
+
+Po zakończeniu prac możemy wyjść z virtualenv'a za pomocą polecenia:
+```bash
+deactivate
+```
