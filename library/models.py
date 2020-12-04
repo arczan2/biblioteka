@@ -3,7 +3,7 @@ from django.db import models
 
 class Genre(models.Model):
     name = models.CharField(max_length=20, unique=True, null=False, blank=False)
-    description = models.CharField(max_length=120, default='brak opisu')
+    description = models.TextField(default='brak opisu')
 
     def clean(self):
         from django.core.exceptions import ValidationError
