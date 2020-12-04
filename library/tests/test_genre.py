@@ -20,5 +20,8 @@ class GenreTestCase(TestCase):
         self.assertEqual(genre.description, 'brak opisu')
 
     def test_cant_add_genre_without_or_with_empty_name(self):
+        """
+        Sprawdza czy próby dodania gatunku bez nazwy zostanie zablokowana
+        """
         self.assertRaises(Exception, Genre.objects.create, name='')
         self.assertRaises(Exception, Genre.objects.create)

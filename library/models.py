@@ -12,5 +12,6 @@ class Genre(models.Model):
             raise ValidationError('Nazwa książki nie moze być pusta')
 
     def save(self, *args, **kwargs):
+        # Walidacja danych przed próbą zapisania
         self.clean()
         super().save(*args, **kwargs)
