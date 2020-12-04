@@ -1,3 +1,21 @@
 from django.db import models
 
-# Create your models here.
+
+class Genre(models.Model):
+    name = models.CharField(max_length=20, unique=True, null=False, blank=False)
+    description = models.TextField(default='brak opisu')
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        # Jeżeli nazwa książki jest pusta to zwróć wyjątek
+        if self.name is None or self.name == '':
+            raise ValidationError('Nazwa gatunku nie moze być pusta')
+        # Sprawdz czy gatunek o tej nazwie juz istnieje w bazie
+        if self.name.lower() in [names['name'].lower() for names in
+                                 Genre.objects.all().values('name')]:
+            raise ValidationError('Gatunek o tej nazwie już istnieje')
+
+    def save(self, *args, **kwargs):
+        # Walidacja danych przed próbą zapisania
+        self.clean()
+        super().save(*args, **kwargs)
