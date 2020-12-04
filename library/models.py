@@ -9,7 +9,11 @@ class Genre(models.Model):
         from django.core.exceptions import ValidationError
         # Jeżeli nazwa książki jest pusta to zwróć wyjątek
         if self.name is None or self.name == '':
-            raise ValidationError('Nazwa książki nie moze być pusta')
+            raise ValidationError('Nazwa gatunku nie moze być pusta')
+        # Sprawdz czy gatunek o tej nazwie juz istnieje w bazie
+        if self.name.lower() in [names['name'].lower() for names in
+                                 Genre.objects.all().values('name')]:
+            raise ValidationError('Gatunek o tej nazwie już istnieje')
 
     def save(self, *args, **kwargs):
         # Walidacja danych przed próbą zapisania

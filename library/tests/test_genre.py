@@ -10,7 +10,7 @@ class GenreTestCase(TestCase):
         """
         Genre.objects.create(name='Thriller', description='Opis 1')
         self.assertRaises(Exception, Genre.objects.create,
-                          name='Thriller', description='Opis 2')
+                          name='thriller', description='Opis 3')
 
     def test_default_description(self):
         """
