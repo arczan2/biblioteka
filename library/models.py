@@ -19,3 +19,25 @@ class Genre(models.Model):
         # Walidacja danych przed próbą zapisania
         self.clean()
         super().save(*args, **kwargs)
+
+
+class Author(models.Model):
+    name = models.CharField(max_length=40, null=False)
+    surrname = models.CharField(max_length=40, null=False,)
+    nationality = models.TextField(max_length=50, default='narodowosc nieznana')
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+
+        if self.name is None or self.name == '' or self.surrname is None or self.surrname == '':
+            raise ValidationError('Imię i nazwisko to pola wymagane i nie mogą byc puste')
+
+        if self.name.lower() in [names['name'].lower() for names in
+            Author.objects.all().values('name')] and self.surrname.lower() in [surrnames['surrname'].lower() for surrnames in
+            Author.objects.all().values('surrname')] and self.nationality.lower() in [nationalities['nationality'].lower() for nationalities in
+            Author.objects.all().values('nationality')]:
+                raise ValidationError('Taka osoba już istnieje w bazie autorów')
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)

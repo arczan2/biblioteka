@@ -28,3 +28,6 @@ jobs:
     - name: Genre test
       run: |
         python manage.py test library.tests.test_genre
+    - name: Author test
+      run: |
+        python manage.py test library.tests.test_author
