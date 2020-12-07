@@ -31,3 +31,6 @@ jobs:
     - name: Author test
       run: |
         python manage.py test library.tests.test_author
+    - name: Book test
+      run: |
+        python manage.py test library.tests.test_book
