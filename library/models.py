@@ -1,4 +1,5 @@
 from django.db import models
+from enum import Enum
 
 
 class Genre(models.Model):
@@ -63,3 +64,16 @@ class Book(models.Model):
         # Walidacja danych przed próbą zapisania
         self.clean()
         super().save(*args, **kwargs)
+
+
+class BookCopy(models.Model):
+    cover_types = (
+        ('brak informacji', 'brak informacji'),
+        ('miękka', 'miękka'),
+        ('twarda', 'twarda'),
+    )
+    year = models.IntegerField(default=2020)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    condition = models.CharField(max_length=100, default='brak informacji')
+    cover = models.CharField(max_length=20, choices=cover_types,
+                             default='brak informacji')
