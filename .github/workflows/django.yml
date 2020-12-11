@@ -34,3 +34,6 @@ jobs:
     - name: Book test
       run: |
         python manage.py test library.tests.test_book
+    - name: BookCopy test
+      run: |
+        python manage.py test library.tests.test_book_copy
