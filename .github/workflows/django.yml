@@ -37,3 +37,6 @@ jobs:
     - name: BookCopy test
       run: |
         python manage.py test library.tests.test_book_copy
+    - name: Borrow test
+      run: |
+        python manage.py test library.tests.test_borrow
