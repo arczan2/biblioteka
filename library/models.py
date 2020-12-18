@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from enum import Enum
 
 
@@ -77,3 +78,8 @@ class BookCopy(models.Model):
     condition = models.CharField(max_length=100, default='brak informacji')
     cover = models.CharField(max_length=20, choices=cover_types,
                              default='brak informacji')
+
+
+class Borrow(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
