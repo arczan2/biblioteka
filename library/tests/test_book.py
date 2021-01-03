@@ -8,7 +8,7 @@ class BookTestCase(TestCase):
         Sprawdza czy próba dodania dwóch książek o tej samej nazwie wywoła
         wyjątek
         """
-        Book.objects.create(title='Ksiazka', pages=250,) #genre=None, author=None)
+        Book.objects.create(title='Ksiazka', pages=250)
         self.assertRaises(Exception, Book.objects.create,
                           title='ksiazka', pages=300)
 
