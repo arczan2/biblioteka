@@ -48,7 +48,7 @@ class Author(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=40)
     pages = models.IntegerField()
-    #genre
+    genre = models.ForeignKey(Genre, null=True, on_delete=models.SET_NULL)
     author = models.ForeignKey(Author, null=True, on_delete=models.SET_NULL)
 
     def clean(self):
