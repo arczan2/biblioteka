@@ -41,5 +41,5 @@ jobs:
       run: |
         python manage.py test library.tests.test_borrow
     - name: BorrowExtension test
-        run: |
-          python manage.py test library.tests.test_borrow_extension
+      run: |
+        python manage.py test library.tests.test_borrow_extension
