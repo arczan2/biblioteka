@@ -1,7 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
 from enum import Enum
 import datetime
+
 
 class Genre(models.Model):
     name = models.CharField(max_length=20, unique=True, null=False, blank=False)
@@ -80,21 +82,34 @@ class BookCopy(models.Model):
                              default='brak informacji')
 
 
+class BorrowExtension(models.Model):
+    days = models.IntegerField(default=0)
+    extension_date = models.DateField(auto_now_add=True)
+
+
 class Borrow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
     borrow_date = models.DateField(auto_now_add=True)
     return_date = models.DateField(default=None, null=True)
+    borrow_extension = models.ForeignKey(BorrowExtension, on_delete=models.CASCADE, null=True )
+
+    def extend(self, days: int = 7):
+        if self.borrow_extension is not None:
+            raise ValidationError('Wypożycznie zostało już raz przedłużone')
+        extension = BorrowExtension.objects.create(days=days)
+        self.borrow_extension=extension
+        return extension
 
     def return_book(self):
         self.return_date = datetime.date.today()
         self.save()
 
     def clean(self):
-        from django.core.exceptions import ValidationError
         if Borrow.objects.filter(book_copy=self.book_copy, return_date=None).exists() and self.return_date is None:
             raise ValidationError('Wypożyczono już tą książkę')
 
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
+
