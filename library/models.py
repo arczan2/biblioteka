@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from enum import Enum
-
+import datetime
 
 class Genre(models.Model):
     name = models.CharField(max_length=20, unique=True, null=False, blank=False)
@@ -83,3 +83,18 @@ class BookCopy(models.Model):
 class Borrow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
+    borrow_date = models.DateField(auto_now_add=True)
+    return_date = models.DateField(default=None, null=True)
+
+    def return_book(self):
+        self.return_date = datetime.date.today()
+        self.save()
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if Borrow.objects.filter(book_copy=self.book_copy, return_date=None).exists() and self.return_date is None:
+            raise ValidationError('Wypożyczono już tą książkę')
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
