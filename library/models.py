@@ -19,6 +19,9 @@ class Genre(models.Model):
                                  Genre.objects.all().values('name')]:
             raise ValidationError('Gatunek o tej nazwie już istnieje')
 
+    def __str__(self):
+        return self.name
+
     def save(self, *args, **kwargs):
         # Walidacja danych przed próbą zapisania
         self.clean()
@@ -46,6 +49,9 @@ class Author(models.Model):
         self.clean()
         super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.name + " " + self.surrname
+
 
 class Book(models.Model):
     title = models.CharField(max_length=40)
@@ -68,6 +74,9 @@ class Book(models.Model):
         self.clean()
         super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.title + " " + str(self.author)
+
 
 class BookCopy(models.Model):
     cover_types = (
@@ -81,6 +90,9 @@ class BookCopy(models.Model):
     cover = models.CharField(max_length=20, choices=cover_types,
                              default='brak informacji')
 
+    def __str__(self):
+        return self.book.title + " " + str(self.id)
+
 
 class BorrowExtension(models.Model):
     days = models.IntegerField(default=0)
@@ -92,13 +104,13 @@ class Borrow(models.Model):
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
     borrow_date = models.DateField(auto_now_add=True)
     return_date = models.DateField(default=None, null=True)
-    borrow_extension = models.ForeignKey(BorrowExtension, on_delete=models.CASCADE, null=True )
+    borrow_extension = models.ForeignKey(BorrowExtension, on_delete=models.CASCADE, null=True, blank=True)
 
     def extend(self, days: int = 7):
         if self.borrow_extension is not None:
             raise ValidationError('Wypożycznie zostało już raz przedłużone')
         extension = BorrowExtension.objects.create(days=days)
-        self.borrow_extension=extension
+        self.borrow_extension = extension
         return extension
 
     def return_book(self):
@@ -112,4 +124,7 @@ class Borrow(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.book_copy) + " " + str(self.user)
 
