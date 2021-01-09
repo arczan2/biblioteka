@@ -2,6 +2,10 @@ from django.urls import path
 
 from . import views
 
+app_name = 'library'
+
 urlpatterns = [
-    path('', views.TestView.as_view(), name='index'),
+    path('', views.home, name='frontpage'),
+    path('books', views.book, name='books'),
+    path('registration', views.register, name='registration')
 ]
