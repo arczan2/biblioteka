@@ -314,7 +314,7 @@ margin: 10px;
 
 
 
- .container .grid input[type=text]:focus {
+ .search:focus {
     width: 240px;
 }
 
