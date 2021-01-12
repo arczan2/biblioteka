@@ -122,8 +122,7 @@ p{
 }
 
 .show-form input[type='email'],
-.show-form input[type='field'],
-.show-form input[type='text'],
+ .show-form input[type='text'],
 .show-form input[type='password']{
     border: 0;
     border-bottom: 1px solid #b4becb;
@@ -134,6 +133,7 @@ p{
 
 .show-form input:focus{
     outline: none;
+
 }
 .show::before,
 .show::after{
@@ -314,7 +314,7 @@ margin: 10px;
 
 
 
-input[type=text]:focus {
+ .container .grid input[type=text]:focus {
     width: 240px;
 }
 
