@@ -122,6 +122,7 @@ p{
 }
 
 .show-form input[type='email'],
+.show-form input[type='field'],
 .show-form input[type='text'],
 .show-form input[type='password']{
     border: 0;
