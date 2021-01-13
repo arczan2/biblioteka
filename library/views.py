@@ -12,3 +12,8 @@ def book(request):
 
 def register(request):
     return render(request, 'library/registration.html')
+
+
+
+def ui_main(request):
+    return render(request, 'library/ui_main.html')
