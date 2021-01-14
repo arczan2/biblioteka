@@ -10,4 +10,8 @@ urlpatterns = [
     path('books', views.BookListView.as_view(), name='books'),
     path('book/<int:book_id>', views.BookDetails.as_view(),
          name='book_details'),
+    path('', views.home, name='frontpage'),
+    path('books', views.book, name='books'),
+    path('registration', views.register, name='registration'),
+    path('uimain', views.ui_main, name='uimain')
 ]

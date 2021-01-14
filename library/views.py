@@ -5,6 +5,8 @@ from .models import Book
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.shortcuts import redirect
+
 
 
 class LoginView(View):
@@ -44,3 +46,20 @@ class BookDetails(View):
 
 class MyBorrowList(View):
     pass
+
+
+def home(request):
+    return render(request, 'library/index.html')
+
+
+def book(request):
+    return render(request, 'library/books.html')
+
+
+def register(request):
+    return render(request, 'library/registration.html')
+
+
+
+def ui_main(request):
+    return render(request, 'library/ui_main.html')
