@@ -1,7 +1,7 @@
 <ol>
 {% for book in books %}
 
-    <li>{{ book.title }}</li>
+    <li><a href="{% url 'library:book_details' book.pk %}">{{ book.title }}</a></li>
 
 {% endfor %}
 </ol>

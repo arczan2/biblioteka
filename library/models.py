@@ -56,8 +56,10 @@ class Author(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=40)
     pages = models.IntegerField()
-    genre = models.ForeignKey(Genre, null=True, on_delete=models.SET_NULL)
-    author = models.ForeignKey(Author, null=True, on_delete=models.SET_NULL)
+    genre = models.ForeignKey(Genre, null=True, on_delete=models.SET_NULL,
+                              blank=True)
+    author = models.ForeignKey(Author, null=True, on_delete=models.SET_NULL,
+                               blank=True)
 
     def clean(self):
         from django.core.exceptions import ValidationError
