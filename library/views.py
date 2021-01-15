@@ -25,7 +25,7 @@ class LoginView(View):
             login(request, user)
             return HttpResponseRedirect(reverse('library:uimain'))
         else:
-            return HttpResponseRedirect(reverse('library:frontpage'))
+            return render(request, "library/index.html", {"error": "Błędny login lub hasło"})
 
 
 class LogoutView(View):
