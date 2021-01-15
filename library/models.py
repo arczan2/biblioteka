@@ -60,6 +60,7 @@ class Book(models.Model):
                               blank=True)
     author = models.ForeignKey(Author, null=True, on_delete=models.SET_NULL,
                                blank=True)
+    description = models.TextField(default='brak opisu')
     image = models.ImageField(upload_to='book_images/', null=True, blank=True)
 
     def clean(self):
