@@ -44,7 +44,13 @@
                         </div>
                         {% csrf_token %}
                         <input type="submit" value="Zaloguj" class="btn btn-primary">
-                        <br> {{error}}
+
+                        {% if error %}
+                              <div class="alert alert-error">
+                        <i class="fas fa-info"></i> {{ error }}
+                              </div>
+                        {% endif %}
+                        <br>
                     </form>
                 </div>
         </div>

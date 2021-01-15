@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300&display=swap');
 
+
+
+/* General */
 :root
 {
     --main-color:#5d4792;
@@ -58,7 +61,7 @@ p{
 }
 
 
-
+/* Navbar */
 .navbar {
     height: 69px;
     background-color: var(--main-color);
@@ -80,6 +83,8 @@ p{
 {
     border-bottom: 2px aliceblue solid;
 }
+
+/* Show */
 .show
 {
     height: 400px;
@@ -274,7 +279,7 @@ margin: 10px;
     font-size: 26px;
 }
 
-/* Features */
+/* Registration */
 .features-head img,
 .register img {
     width: 640px;
@@ -302,7 +307,7 @@ margin: 10px;
     grid-column: 1 / span 2;
 }
 
-.reg{
+.books{
     min-height: 500px;
 }
 
@@ -405,4 +410,6 @@ tr:nth-child(even) {
     }
 
 }
+
+
 
