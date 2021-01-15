@@ -20,16 +20,16 @@
         <h3>virtual  <span>library</span></h3>
       </div>
       <div class="right_area">
-        <a href="#" class="logout_btn">Wyloguj</a>
+        <a href="{% url 'library:logout' %}" class="logout_btn">Wyloguj</a>
       </div>
     </header>
     <div class="mobile_nav">
       <div class="nav_bar">
-        <h4>Nick</h4>
+        <h4>{{ user.username }}</h4>
         <i class="fa fa-bars nav_btn"></i>
       </div>
       <div class="mobile_nav_items">
-       <a href="#"><i class="fas fa-table"></i><span>Wypożyczone</span></a>
+       <a href="#"><i class="fas fa-table"></i><span>Wypożyczone książki</span></a>
       <a href="#"><i class="fas fa-th"></i><span>Rezerwuj</span></a>
       <a href="#"><i class="fas fa-info-circle"></i><span>Powiadomienia</span></a>
       <a href="#"><i class="fas fa-sliders-h"></i><span>Ustawienia</span></a>
@@ -37,9 +37,9 @@
     </div>
     <div class="sidebar">
       <div class="profile_info">
-        <h4>Nick</h4>
+        <h4>{{ user.username }}</h4>
       </div>
-      <a href="#"><i class="fas fa-table"></i><span>Wypożyczone</span></a>
+      <a href="#"><i class="fas fa-table"></i><span>Wypożyczone książki</span></a>
       <a href="#"><i class="fas fa-th"></i><span>Rezerwuj</span></a>
       <a href="#"><i class="fas fa-info-circle"></i><span>Powiadomienia</span></a>
       <a href="#"><i class="fas fa-sliders-h"></i><span>Ustawienia</span></a>
@@ -48,7 +48,7 @@
     <div id="options"></div>
       <div class="card">
 
-
+      {% block content %}{% endblock %}
 
       </div>
     </div>

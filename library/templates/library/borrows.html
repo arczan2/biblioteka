@@ -1,0 +1,24 @@
+{% extends 'library/ui_main.html' %}
+
+{% block content %}
+<table>
+    <tr>
+        <th>Tytuł</th>
+        <th>Autor</th>
+        <th>Data wypożyczenia</th>
+        <th>Data oddania</th>
+    </tr>
+    {% for borrow in borrows %}
+    <tr>
+        <td><a href="{% url 'library:book_details' borrow.book_copy.book.pk %}">{{ borrow.book_copy.book.title }}</a></td>
+        {% if borrow.book_copy.book.author %}
+        <td>{{ borrow.book_copy.book.author }}</td>
+        {% else %}
+        <td>???</td>
+        {% endif %}
+        <td>{{ borrow.borrow_date }}</td>
+        <td>{% if borrow.return_date %}{{ borrow.return_date }}{% endif %}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

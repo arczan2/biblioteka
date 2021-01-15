@@ -50,36 +50,10 @@
                     </div>
                 <div class="show-form">
 
-                <form method="post">
+                <form method="post" action="">
 
-                     <div class="form-control">
-                        <label>Imie</label>
-                        <input type="text" name="name" placeholder="Adam" required>
-                    </div>
-
-                    <div class="form-control">
-                        <label>Nazwisko</label>
-                        <input type="text" name="surrname" placeholder="Nowak" required>
-                    </div>
-
-                    <div class="form-control">
-                        <label>Login</label>
-                        <input type="text" name="login" placeholder="AdmNow" required>
-                    </div>
-
-
-                    <div class="form-control">
-                        <label>Email</label>
-                        <input type="email" name="email" placeholder="Adam@gmail.com" required>
-                    </div>
-                    <div class="form-control">
-                        <label>Hasło</label>
-                        <input type="password" name="password" placeholder="********" required>
-                    </div>
-                    <div class="form-control">
-                        <label>Potwierdź hasło</label>
-                        <input type="password" name="password" placeholder="********" required>
-                    </div>
+                    {% csrf_token %}
+                    {{ form }}
                     <input type="submit" value="Potwierdź dane " class="btn btn-primary">
                 </form>
                 </div>

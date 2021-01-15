@@ -1,8 +1,3 @@
-{% for book in books %}
-
-    <li><a href="{% url 'library:book_details' book.pk %}">{{ book.title }}</a></li>
-
-{% endfor %}
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -50,7 +45,7 @@
             <div>
                 <h1 class="md">Wpisz tytuł</h1>
 
-                <form>
+                <form method="get" action="">
                     <input class="search" type="text" name="search" placeholder="Szukaj..">
                     <input type="submit" value="Zatwierdź" class="btn btn-primary">
                 </form>
@@ -65,40 +60,28 @@
         <div class="reg container grid grid-3">
             <table>
                 <tr>
+                    <th></th>
                     <th>Tytuł</th>
                     <th>Autor</th>
                     <th>Ilość stron</th>
                 </tr>
+                {% for book in books %}
                 <tr>
-                    <td>Algebra liniowa 1 przykłady i zadania</td>
-                    <td>Jurkiewicz Skoczylas</td>
-                    <td>167</td>
+                    {% if book.image %}
+                        <td><img src="/media/{{ book.image }}" alt="{{ book.title }}"></td>
+                    {% else %}
+                        <td>???</td>
+                    {% endif %}
+                    <td><a href="{% url 'library:book_details' book.pk %}">{{ book.title }}</a></td>
+                    {% if book.author %}
+                    <td>{{ book.author }}</td>
+                    {% else %}
+                    <td>???</td>
+                    {% endif %}
+
+                    <td>{{ book.pages }}</td>
                 </tr>
-                <tr>
-                    <td>Harry Potter i Książę Półkrwi</td>
-                    <td>J.K. Rowling</td>
-                    <td>704</td>
-                </tr>
-                <tr>
-                    <td>Władca Pierścieni</td>
-                    <td>J.R.R. Tolkien</td>
-                    <td>1280</td>
-                </tr>
-                <tr>
-                    <td>Wiedźmin Pani Jeziora</td>
-                    <td>Andrzej Sapkowski</td>
-                    <td>544</td>
-                </tr>
-                <tr>
-                    <td>Wiedźmin Ostatnie życzenie</td>
-                    <td>Andrzej Sapkowski</td>
-                    <td>288</td>
-                </tr>
-                <tr>
-                    <td>Wprowadzenie do algorytmów</td>
-                    <td>Thomas H. Cormen</td>
-                    <td>1312</td>
-                </tr>
+                {% endfor %}
             </table>
 
         </div>
