@@ -112,6 +112,17 @@ p{
 {
     margin: 30px 0;
 }
+
+.reg-form input
+{
+    margin: 13px 0;
+}
+
+.reg-form label
+{
+    font-weight: bold;
+}
+
 .card .show-form{
     position: static;
     z-index: 0;
@@ -359,6 +370,11 @@ tr:nth-child(even) {
     font-weight: bold;
 }
 
+
+.helptext
+{
+    display: none;
+}
 
 @media only screen and (min-width: 868px) {
     #content .content {

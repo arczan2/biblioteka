@@ -144,9 +144,9 @@ label #sidebar_btn:hover{
 
 .content{
   margin-top: 60px;
-
+  padding: 25px;
   margin-left: 250px;
-  background-color: #383838;
+  background-color: white;
   background-position: center;
   background-size: cover;
   height: 100vh;
@@ -177,6 +177,28 @@ label #sidebar_btn:hover{
   opacity: 0.8;
 }
 
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+
+#options
+{
+  display: none;
+}
 
 @media screen and (max-width: 780px){
   .sidebar{
@@ -258,4 +280,5 @@ label #sidebar_btn:hover{
   .active{
     display: block;
   }
+
 }
