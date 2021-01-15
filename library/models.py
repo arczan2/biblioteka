@@ -56,8 +56,11 @@ class Author(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=40)
     pages = models.IntegerField()
-    genre = models.ForeignKey(Genre, null=True, on_delete=models.SET_NULL)
-    author = models.ForeignKey(Author, null=True, on_delete=models.SET_NULL)
+    genre = models.ForeignKey(Genre, null=True, on_delete=models.SET_NULL,
+                              blank=True)
+    author = models.ForeignKey(Author, null=True, on_delete=models.SET_NULL,
+                               blank=True)
+    image = models.ImageField(upload_to='book_images/', null=True, blank=True)
 
     def clean(self):
         from django.core.exceptions import ValidationError
@@ -103,7 +106,7 @@ class Borrow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
     borrow_date = models.DateField(auto_now_add=True)
-    return_date = models.DateField(default=None, null=True)
+    return_date = models.DateField(default=None, null=True, blank=True)
     borrow_extension = models.ForeignKey(BorrowExtension, on_delete=models.CASCADE, null=True, blank=True)
 
     def extend(self, days: int = 7):
