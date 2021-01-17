@@ -143,14 +143,16 @@ label #sidebar_btn:hover{
 }
 
 .content{
+
   margin-top: 60px;
-  padding: 25px;
+  padding: 35px;
   margin-left: 250px;
-  background-color: white;
+  background-color: #e3e7e6;
   background-position: center;
   background-size: cover;
   height: 100vh;
   transition: 0.5s;
+
 }
 
 #check:checked ~ .content{
@@ -178,20 +180,49 @@ label #sidebar_btn:hover{
 }
 
 
-table {
+.styled-table {
+ -moz-border-radius:10px;
     border-collapse: collapse;
-    width: 100%;
-}
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
 
-td, th {
-    border: 1px solid #dddddd;
+}
+.styled-table thead tr {
+    background-color: #5d4792;
+    color: #ffffff;
     text-align: left;
-    padding: 8px;
 
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
+
+.styled-table th,
+.styled-table td {
+
+    padding: 12px 15px;
+}
+.styled-table td a {
+text-decoration: none;
+  color: black;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #5d4792;
+}
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #5d4792;
 }
 
 

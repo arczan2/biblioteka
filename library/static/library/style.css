@@ -118,6 +118,7 @@ p{
     margin: 30px 0;
 }
 
+/* Registration */
 .reg-form input
 {
     margin: 13px 0;
@@ -128,13 +129,20 @@ p{
     font-weight: bold;
 }
 
+.card{
+    background-color:white ;
+    color: #333333;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+    padding: 18px;
+    margin: 9px;
+}
+
 .card .show-form{
     position: static;
     z-index: 0;
     padding: 10px;
-    min-height: 600px;
-
-
+    min-height: 540px;
 }
 
 .show-form input[type='email'],
@@ -172,14 +180,7 @@ position: absolute;
 }
 
 
-.card{
-    background-color:white ;
-    color: #333333;
-    border-radius: 8px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.5);
-    padding: 18px;
-    margin: 9px;
-}
+
 
 .btn
 {
@@ -381,7 +382,58 @@ tr:nth-child(even) {
     display: none;
 }
 
-@media only screen and (min-width: 868px) {
+
+
+
+#bookcase .bookcase {
+	flex-direction: column;
+	text-align: center;
+	max-width: 1500px;
+	margin: 0 auto;
+	padding: 50px 0;
+}
+
+#bookcase .bookcase-main {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	margin-top: 50px;
+}
+#bookcase .bookcase-item {
+    text-align: center;
+	flex-basis: 80%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 30px;
+	background-size: cover;
+	margin: 10px 5%;
+	position: relative;
+	z-index: 1;
+	overflow: hidden;
+}
+
+#bookcase .bookcase-item img {
+max-height: 300px;
+}
+
+.details img
+{
+   max-height: 500px;
+
+}
+
+
+
+@media only screen and (min-width: 867px) {
+
+	#bookcase .bookcase-main .bookcase-item {
+		flex-basis: 40%;
+		margin: 2.5%;
+	}
+
     #content .content {
         flex-direction: row;
     }
@@ -408,6 +460,16 @@ tr:nth-child(even) {
     #content .col-right h1 {
         text-align: left;
     }
+
+
+
+}
+
+@media only screen and (min-width: 1200px) {
+#bookcase .bookcase-main .bookcase-item {
+		flex-basis: 30%;
+		margin: 1.5%;
+	}
 
 }
 

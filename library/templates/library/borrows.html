@@ -1,13 +1,16 @@
 {% extends 'library/ui_main.html' %}
 
 {% block content %}
-<table>
+<table class="styled-table">
     <tr>
+        <thead>
         <th>Tytuł</th>
         <th>Data wypożyczenia</th>
         <th>Dni do końca</th>
         <th>Data oddania</th>
+        </thead>
     </tr>
+    <tbody>
     {% for borrow in borrows %}
     <tr>
         <td><a href="{% url 'library:book_details' borrow.book_copy.book.pk %}">{{ borrow.book_copy.book.title }}</a></td>
@@ -20,5 +23,6 @@
         <td>{% if borrow.return_date %}{{ borrow.return_date }}{% endif %}</td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
 {% endblock %}
