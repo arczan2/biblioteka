@@ -12,4 +12,6 @@ urlpatterns = [
     path('uimain', views.ui_main, name='uimain'),
     path('logout', views.LogoutView.as_view(), name='logout'),
     path('registration', views.RegistrationView.as_view(), name='registration'),
+    path('user_books', views.UserBookListView.as_view(), name='userbooks'),
+    path('user_book/<int:id>', views.UserBookDetailsView.as_view(), name='user_book_details'),
 ]

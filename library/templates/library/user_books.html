@@ -1,0 +1,32 @@
+{% extends 'library/ui_main.html' %}
+
+{% block content %}
+ <section id="bookcase" class=" features-main my-2">
+        <div class="books  container ">
+           <div class="bookcase-main">
+
+            {% for book in books %}
+                 <div class="bookcase-item">
+                    {% if book.image %}
+                        <img src="/media/{{ book.image }}" alt="{{ book.title }}">
+                    {% else %}
+                        ???
+                    {% endif %}
+                    <a href="{% url 'library:user_book_details' book.pk %}"><h4>{{ book.title }}</h4></a>
+                    {% if book.author %}
+                    {{ book.author }}
+                    {% else %}
+                    ???
+                    {% endif %}
+
+
+                 </div>
+            {% endfor %}
+
+
+
+      </div>
+
+        </div>
+    </section>
+{% endblock %}
