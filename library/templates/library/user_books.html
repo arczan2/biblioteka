@@ -1,112 +1,28 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
-     {% load static %}
+{% extends 'library/ui_main.html' %}
 
-    <link  rel="stylesheet" href="{% static 'library/utilities.css' %}"/>
-    <link  rel="stylesheet" href="{% static 'library/style.css' %}"/>
-
-    <script src="script.js"></script>
-    <title>Virtual Library</title>
-</head>
-<body>
-    <!-- Navbar -->
-    <div class="navbar">
-        <div class="container flex">
-            <h1 class="logo">VLIB</h1>
-           <nav>
-                <ul>
-                    <li><a href="{% url 'library:frontpage' %}">Strona główna</a></li>
-                    <li><a href="{% url 'library:books' %}">Lista książek</a></li>
-                    <li><a href="{% url 'library:registration' %}">Rejestracja</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-
-    <!-- Head -->
-    <section class="features-head bg-primary py-3">
-        <div class="container grid">
-            <div>
-                <h1 class="xl">Wyszukaj</h1>
-                <p class="lead">
-                    Sprawdź co mamy na stanie!
-                </p>
-            </div>
-        </div>
-    </section>
-
-
-    <section class="features-sub-head bg-light py-3">
-        <div class="container grid">
-            <div>
-                <h1 class="md">Wpisz tytuł</h1>
-
-                <form method="get" action="">
-                    <input class="search" type="text" name="search" placeholder="Szukaj..">
-                    <input type="submit" value="Zatwierdź" class="btn btn-primary">
-                </form>
-
-
-            </div>
-            <img src="{% static 'library/img/search-guys.png' %}" alt="">
-        </div>
-    </section>
-
-    <section id="bookcase" class=" features-main my-2">
-        <div class="books  container ">
-           <div class="bookcase-main">
-
-            {% for book in books %}
-                 <div class="bookcase-item">
-                    {% if book.image %}
-                        <img src="/media/{{ book.image }}" alt="{{ book.title }}">
-                    {% else %}
-                        ???
-                    {% endif %}
-                    <a href="{% url 'library:book_details' book.pk %}"><h4>{{ book.title }}</h4></a>
-                    {% if book.author %}
-                    {{ book.author }}
-                    {% else %}
-                    ???
-                    {% endif %}
-
-
-                 </div>
-            {% endfor %}
-
-
-
-      </div>
-
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer bg-dark py-5">
-        <div class="container grid grid-3">
-            <div>
-                <h1>Biblioteka Projekt AGH
-                </h1>
-                <p>Copyright &copy; 2021</p>
-            </div>
-             <nav>
-                <ul>
-                    <li><a href="{% url 'library:frontpage' %}">Strona główna</a></li>
-                    <li><a href="{% url 'library:books' %}">Lista książek</a></li>
-                    <li><a href="{% url 'library:registration' %}">Rejestracja</a></li>
-                </ul>
-            </nav>
-            <div class="social">
-                <a href="https://github.com/arczan2/biblioteka" target="_blank"><i class="fab fa-github fa-2x"></i></a>
-                <a href="#"><i class="fab fa-facebook fa-2x"></i></a>
-                <a href="#"><i class="fab fa-instagram fa-2x"></i></a>
-                <a href="#"><i class="fab fa-twitter fa-2x"></i></a>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
+{% block content %}
+<table class="styled-table">
+    <tr>
+        <thead>
+        <th>Tytuł</th>
+        <th>Data wypożyczenia</th>
+        <th>Dni do końca</th>
+        <th>Data oddania</th>
+        </thead>
+    </tr>
+    <tbody>
+    {% for borrow in borrows %}
+    <tr>
+        <td><a href="{% url 'library:book_details' borrow.book_copy.book.pk %}">{{ borrow.book_copy.book.title }}</a></td>
+        {% if borrow.book_copy.book.author %}
+        <td>{{ borrow.book_copy.book.author }}</td>
+        {% else %}
+        <td>???</td>
+        {% endif %}
+        <td>{{ borrow.borrow_date }}</td>
+        <td>{% if borrow.return_date %}{{ borrow.return_date }}{% endif %}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

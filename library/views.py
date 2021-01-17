@@ -93,3 +93,21 @@ class RegistrationView(View):
     def get(self, request):
         form = RegisterForm
         return render(request, 'library/registration.html', {'form': form})
+
+
+class UserBookListView(View):
+    """ Wyświetla listę książek """
+    def get(self, request):
+        books = Book.objects.all()
+        name = None
+        if 'search' in request.GET:
+            name = request.GET['search']
+
+        books_list = list()
+        if name:
+            for book in books:
+                if name in book.title:
+                    books_list.append(book)
+            books = books_list
+
+        return render(request, 'library/user_books.html', {'books': books})
