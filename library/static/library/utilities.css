@@ -129,6 +129,8 @@
 .alert-error {
   background-color: var(--error-color);
   color: #fff;
+  font-weight: normal;
+  font-size: 15px;
 }
 
 .flex {

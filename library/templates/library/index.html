@@ -37,14 +37,20 @@
                     <h2>Zaloguj się</h2>
                     <form method="post" action="{% url 'library:login' %}">
                         <div class="form-control">
-                            <input type="text" name="username" placeholder="Email">
+                            <input type="text" name="username" placeholder="Login">
                         </div>
                         <div class="form-control">
                             <input type="password" name="password" placeholder="********" required>
                         </div>
                         {% csrf_token %}
                         <input type="submit" value="Zaloguj" class="btn btn-primary">
-                        <br> {{error}}
+
+                        {% if error %}
+                              <div class="alert alert-error">
+                        <i class="fas fa-info"></i> {{ error }}
+                              </div>
+                        {% endif %}
+                        <br>
                     </form>
                 </div>
         </div>

@@ -56,33 +56,31 @@
         </div>
     </section>
 
-    <section class="features-main my-2">
-        <div class="reg container grid grid-3">
-            <table>
-                <tr>
-                    <th></th>
-                    <th>Tytuł</th>
-                    <th>Autor</th>
-                    <th>Ilość stron</th>
-                </tr>
-                {% for book in books %}
-                <tr>
+    <section id="bookcase" class=" features-main my-2">
+        <div class="books  container ">
+           <div class="bookcase-main">
+
+            {% for book in books %}
+                 <div class="bookcase-item">
                     {% if book.image %}
-                        <td><img src="/media/{{ book.image }}" alt="{{ book.title }}"></td>
+                        <img src="/media/{{ book.image }}" alt="{{ book.title }}">
                     {% else %}
-                        <td>???</td>
+                        ???
                     {% endif %}
-                    <td><a href="{% url 'library:book_details' book.pk %}">{{ book.title }}</a></td>
+                    <a href="{% url 'library:book_details' book.pk %}"><h4>{{ book.title }}</h4></a>
                     {% if book.author %}
-                    <td>{{ book.author }}</td>
+                    {{ book.author }}
                     {% else %}
-                    <td>???</td>
+                    ???
                     {% endif %}
 
-                    <td>{{ book.pages }}</td>
-                </tr>
-                {% endfor %}
-            </table>
+
+                 </div>
+            {% endfor %}
+
+
+
+      </div>
 
         </div>
     </section>
