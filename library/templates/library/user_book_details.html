@@ -1,0 +1,31 @@
+{% extends 'library/ui_main.html' %}
+
+{% block content %}
+  <section class="docs-main my-4">
+        <div class="container grid">
+
+            <div class="details">
+
+                {% if book.image %}
+                    <img src="/media/{{ book.image }}" alt="{{ book.title }}">
+                {% else %}
+                    <p>???</p>
+                {% endif %}
+
+
+            </div>
+            <div class="details" >
+
+               <h3>{{ book.title }}</h3>
+                <h4>Autor</h4>
+                <p>{{ book.author }}</p>
+                 <h4>Gatunek</h4>
+                <p>{{ book.genre }}</p>
+                <h4>Opis</h4>
+                <p>{{ book.description }}</p>
+
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

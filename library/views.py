@@ -111,3 +111,10 @@ class UserBookListView(View):
             books = books_list
 
         return render(request, 'library/user_books.html', {'books': books})
+
+
+class UserBookDetailsView(View):
+    """ Wyświetla informacje o książce """
+    def get(self, request, id: int):
+        book = Book.objects.get(pk=id)
+        return render(request, 'library/user_book_details.html', {'book': book})
