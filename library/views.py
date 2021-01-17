@@ -78,7 +78,7 @@ def register(request):
 
 @login_required
 def ui_main(request):
-    borrows = Borrow.objects.all()
+    borrows = Borrow.objects.filter(user=request.user)
     return render(request, 'library/borrows.html', {'borrows': borrows})
 
 
