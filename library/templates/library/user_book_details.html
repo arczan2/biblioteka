@@ -27,9 +27,13 @@
             </div>
 
             {% if can_borrow %}
-           <div class="reserve"> <a  href="{% url 'library:borrow_book' book.pk %}">Rezerwuj</a><div>
+                {% if user_borrow_count < 3 %}
+                    <div class="reserve"> <a  href="{% url 'library:borrow_book' book.pk %}">Rezerwuj</a></div>
+                {% else %}
+                    <div class="alert-error">  <i class="fas fa-info"></i>  Osiągnięto limit wypożyczeń</div>
+                {% endif %}
             {% else %}
-          <div class="alert-error">  <i class="fas fa-info"></i>  Brak dostępnych egzemplarzy</div>
+                <div class="alert-error">  <i class="fas fa-info"></i>  Brak dostępnych egzemplarzy</div>
             {% endif %}
 
     </section>

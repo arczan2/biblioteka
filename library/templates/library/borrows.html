@@ -19,7 +19,7 @@
         {% else %}
         <td>???</td>
         {% endif %}
-        <td>{{ borrow.borrow_date }}</td>
+        <td>{{ borrow.days }}</td>
         <td>{% if borrow.return_date %}{{ borrow.return_date }}{% endif %}</td>
     </tr>
     {% endfor %}
