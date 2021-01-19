@@ -215,6 +215,13 @@ text-decoration: none;
     border-bottom: 1px solid #dddddd;
 }
 
+
+
+.returned{
+  color: green;
+}
+
+
 .styled-table tbody tr:nth-of-type(even) {
     background-color: #f3f3f3;
 }
@@ -226,6 +233,15 @@ text-decoration: none;
     font-weight: bold;
     color: #5d4792;
 }
+
+ tr .returned{
+    color: green;
+}
+ tr.returned a{
+    color: green !important;
+}
+
+
 
 
 #options
