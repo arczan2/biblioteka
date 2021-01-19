@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.views import View
 from django.shortcuts import render
-from .models import Book, Borrow
+from .models import Book, Borrow, BookCopy
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
@@ -117,4 +117,13 @@ class UserBookDetailsView(View):
     """ Wyświetla informacje o książce """
     def get(self, request, id: int):
         book = Book.objects.get(pk=id)
-        return render(request, 'library/user_book_details.html', {'book': book})
+        return render(request, 'library/user_book_details.html',
+                      {'book': book, 'can_borrow': book.can_borrow()})
+
+
+class BorrowBookView(View):
+    def get(self, request, id: int):
+        book = Book.objects.get(pk=id)
+        copy = BookCopy.objects.filter(book=book)[0]
+        Borrow.objects.create(user=request.user, book_copy=copy)
+        return HttpResponseRedirect(reverse('library:uimain'))
