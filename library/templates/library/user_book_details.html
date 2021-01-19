@@ -26,8 +26,8 @@
 
             </div>
 
-            {% if True %}
-           <div class="reserve"> <a  href="#">Rezerwuj</a><div>
+            {% if can_borrow %}
+           <div class="reserve"> <a  href="{% url 'library:borrow_book' book.pk %}">Rezerwuj</a><div>
             {% else %}
           <div class="alert-error">  <i class="fas fa-info"></i>  Brak dostępnych egzemplarzy</div>
             {% endif %}

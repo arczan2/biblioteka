@@ -81,6 +81,21 @@ class Book(models.Model):
     def __str__(self):
         return self.title + " " + str(self.author)
 
+    def can_borrow(self):
+        """
+        Zwraca prawdę gdy są dostępne egzemplarze książkij
+        """
+        book_copies = BookCopy.objects.filter(book=self)
+
+        try:
+            for copy in book_copies:
+                borrows = Borrow.objects.get(book_copy=copy,
+                                                   return_date=None)
+        except Borrow.DoesNotExist:
+            return True
+
+        return False
+
 
 class BookCopy(models.Model):
     cover_types = (
