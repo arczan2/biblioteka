@@ -12,7 +12,7 @@
     </tr>
     <tbody>
     {% for borrow in borrows %}
-    <tr>
+    <tr class="{% if borrow.return_date %}klasa1{% else %}klasa2{% endif %}">
         <td><a href="{% url 'library:book_details' borrow.book_copy.book.pk %}">{{ borrow.book_copy.book.title }}</a></td>
         {% if borrow.book_copy.book.author %}
         <td>{{ borrow.book_copy.book.author }}</td>
