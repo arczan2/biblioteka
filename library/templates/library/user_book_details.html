@@ -1,8 +1,8 @@
 {% extends 'library/ui_main.html' %}
 
 {% block content %}
-  <section class="docs-main my-4">
-        <div class="container grid">
+  <section>
+
 
             <div class="details">
 
@@ -26,11 +26,11 @@
 
             </div>
 
-            {% if False %}
-            <a href="#">Rezerwuj</a>
+            {% if True %}
+           <div class="reserve"> <a  href="#">Rezerwuj</a><div>
             {% else %}
-            Brak dostępnych egzemplarzy
+          <div class="alert-error">  <i class="fas fa-info"></i>  Brak dostępnych egzemplarzy</div>
             {% endif %}
-        </div>
+
     </section>
 {% endblock %}

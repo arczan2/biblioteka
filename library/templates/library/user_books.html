@@ -1,8 +1,8 @@
 {% extends 'library/ui_main.html' %}
 
 {% block content %}
- <section id="bookcase" class=" features-main my-2">
-        <div class="books  container ">
+ <section id="bookcase" >
+        <div class="books ">
            <div class="bookcase-main">
 
             {% for book in books %}
@@ -12,7 +12,7 @@
                     {% else %}
                         ???
                     {% endif %}
-                    <a href="{% url 'library:user_book_details' book.pk %}"><h4>{{ book.title }}</h4></a>
+                    <a href="{% url 'library:user_book_details' book.pk %}">{{ book.title }}</a>
                     {% if book.author %}
                     {{ book.author }}
                     {% else %}
