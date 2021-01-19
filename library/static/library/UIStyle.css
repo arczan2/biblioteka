@@ -27,7 +27,7 @@ header{
 }
 
 .logout_btn{
-  padding: 5px;
+  padding: 9px;
   background: #5d4792;
   text-decoration: none;
   float: right;
@@ -41,8 +41,10 @@ header{
   transition-property: background;
 }
 
+
+
 .logout_btn:hover{
-  background: #5d4792;
+ transform: scale(0.98);
 }
 
 .sidebar{
