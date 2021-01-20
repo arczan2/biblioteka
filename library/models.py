@@ -138,7 +138,8 @@ class Borrow(models.Model):
 
     def clean(self):
         if Borrow.objects.filter(book_copy=self.book_copy, return_date=None).exists() and self.return_date is None:
-            raise ValidationError('Wypożyczono już tą książkę')
+            if Borrow.objects.get(book_copy=self.book_copy, return_date=None) != self:
+                raise ValidationError('Wypożyczono już tą książkę')
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -149,3 +150,22 @@ class Borrow(models.Model):
     def __str__(self):
         return str(self.book_copy) + " " + str(self.user)
 
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
+    message = models.TextField(default='')
+
+    @classmethod
+    def notify(cls):
+        today_date = datetime.date.today()
+
+        borrows = Borrow.objects.filter(return_date=None)
+        for borrow in borrows:
+            if (today_date - borrow.borrow_date).days < 7:
+                message = "Zostały ci {} dni do oddania książki {}".format(
+                    (today_date - borrow.borrow_date).days,
+                    borrow.book_copy.book.title
+                )
+                cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
+                                   message=message)
