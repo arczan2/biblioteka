@@ -82,13 +82,7 @@ header{
   margin-bottom: 20px;
 }
 
-#options
-{
-width:100%;
-min-height: 20%;
-background-color: #383838;
 
-}
 
 h4
 {
@@ -242,13 +236,6 @@ text-decoration: none;
 }
 
 
-
-
-#options
-{
-  display: none;
-}
-
 /* details for ui */
 
 .reserve a {
@@ -296,6 +283,48 @@ color: #fff;
 
 
 /* Bookcase for ui */
+.options
+{
+  text-align: center;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 30px;
+  cursor: pointer;
+  background: #5d4792;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  margin-top: 15px;
+
+}
+
+.btn:hover {
+
+}
+.search{
+    width: 240px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('img/search.svg');
+    background-position: 15px 15px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+
+
+ .search:focus {
+     transform: scale(1.06);
+}
+
+
 
 #bookcase .bookcase {
 	flex-direction: column;
