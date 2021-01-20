@@ -325,7 +325,8 @@ color: #fff;
 }
 
 #bookcase .bookcase-item img {
-max-height: 290px;
+  max-height: 290px;
+  margin-bottom: 6px;
 }
 
 .bookcase-item a{

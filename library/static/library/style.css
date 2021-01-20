@@ -416,7 +416,8 @@ tr:nth-child(even) {
 }
 
 #bookcase .bookcase-item img {
-max-height: 300px;
+    margin-bottom: 5px;
+    max-height: 300px;
 }
 
 .details img
