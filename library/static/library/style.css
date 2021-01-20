@@ -420,6 +420,7 @@ tr:nth-child(even) {
     max-height: 300px;
 }
 
+
 .details img
 {
    max-height: 500px;
@@ -467,7 +468,7 @@ tr:nth-child(even) {
 }
 
 @media only screen and (min-width: 1200px) {
-#bookcase .bookcase-main .bookcase-item {
+#bookcase .bookcase-main  .bookcase-item {
 		flex-basis: 30%;
 		margin: 1.5%;
 	}
