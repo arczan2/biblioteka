@@ -332,6 +332,7 @@ color: #fff;
 .bookcase-item a{
   text-decoration: none;
   color: black;
+  font-size: 13px;
 }
 
 .bookcase-item h5{
