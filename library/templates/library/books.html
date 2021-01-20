@@ -61,13 +61,14 @@
            <div class="bookcase-main">
 
             {% for book in books %}
-                 <div class="bookcase-item">
+              <div class="bookcase-item">
+               <a href="{% url 'library:book_details' book.pk %}">
                     {% if book.image %}
                         <img src="/media/{{ book.image }}" alt="{{ book.title }}">
                     {% else %}
                         ???
                     {% endif %}
-                    <a href="{% url 'library:book_details' book.pk %}"><h4>{{ book.title }}</h4></a>
+                    <h4>{{ book.title }}</h4>
                     {% if book.author %}
                     {{ book.author }}
                     {% else %}
@@ -75,7 +76,7 @@
                     {% endif %}
 
 
-                 </div>
+              </a>   </div>
             {% endfor %}
 
 
