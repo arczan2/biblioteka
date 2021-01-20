@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from enum import Enum
 import datetime
+from django.utils import timezone
 
 
 class Genre(models.Model):
@@ -89,8 +90,7 @@ class Book(models.Model):
 
         try:
             for copy in book_copies:
-                borrows = Borrow.objects.get(book_copy=copy,
-                                                   return_date=None)
+                borrows = Borrow.objects.get(book_copy=copy, return_date=None)
         except Borrow.DoesNotExist:
             return True
 
@@ -121,7 +121,7 @@ class BorrowExtension(models.Model):
 class Borrow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
-    borrow_date = models.DateField(auto_now_add=True)
+    borrow_date = models.DateField(default=None, null=False)
     return_date = models.DateField(default=None, null=True, blank=True)
     borrow_extension = models.ForeignKey(BorrowExtension, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -141,6 +141,8 @@ class Borrow(models.Model):
             raise ValidationError('Wypożyczono już tą książkę')
 
     def save(self, *args, **kwargs):
+        if not self.id:
+            self.borrow_date = datetime.date.today()
         self.clean()
         super().save(*args, **kwargs)
 

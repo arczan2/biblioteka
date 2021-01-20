@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import RegisterForm
+from datetime import datetime
 
 
 class LoginView(View):
@@ -79,6 +80,11 @@ def register(request):
 @login_required
 def ui_main(request):
     borrows = Borrow.objects.filter(user=request.user)
+    for borrow in borrows:
+        deadline = datetime.now().date() - borrow.borrow_date
+        borrow.days = abs(deadline.days - 30)
+        if borrow.return_date is not None:
+            borrow.days = ''
     return render(request, 'library/borrows.html', {'borrows': borrows})
 
 
@@ -116,9 +122,10 @@ class UserBookListView(View):
 class UserBookDetailsView(View):
     """ Wyświetla informacje o książce """
     def get(self, request, id: int):
+        user_borrow_count = Borrow.objects.filter(user=request.user, return_date=None)
         book = Book.objects.get(pk=id)
         return render(request, 'library/user_book_details.html',
-                      {'book': book, 'can_borrow': book.can_borrow()})
+                      {'book': book, 'can_borrow': book.can_borrow(), "user_borrow_count": len(user_borrow_count)})
 
 
 class BorrowBookView(View):
