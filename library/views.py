@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.views import View
@@ -11,6 +13,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import RegisterForm
 from datetime import datetime
+import operator
 
 
 class LoginView(View):
@@ -79,12 +82,19 @@ def register(request):
 
 @login_required
 def ui_main(request):
-    borrows = Borrow.objects.filter(user=request.user)
+    borrows = list(Borrow.objects.filter(user=request.user).order_by("-return_date"))
+    if len(borrows) <= 0:
+        return render(request, 'library/borrows.html', {'borrows': borrows})
+    i =0
+    while borrows[len(borrows) - 1].return_date is None and i<3:
+        borrows.insert(0, borrows.pop())
+        i += 1
     for borrow in borrows:
         deadline = datetime.now().date() - borrow.borrow_date
         borrow.days = abs(deadline.days - 30)
         if borrow.return_date is not None:
             borrow.days = ''
+
     return render(request, 'library/borrows.html', {'borrows': borrows})
 
 
@@ -156,3 +166,23 @@ def read_notifictaion(request, id: int):
     notification.read = True
     notification.save()
     return HttpResponseRedirect(reverse('library:notifications'))
+
+
+class SettingsView(View):
+    """Wyświetla widok ustawień"""
+    def get(self, request):
+        return render(request, 'library/settings.html')
+
+    def post(self, request):
+        # Pobierz hasła
+        password = request.POST['CurrentPassword']
+        password1 = request.POST['NewPassword']
+        password2 = request.POST['ValidNewPassword']
+        # Wyszukanie użytkownika o podanych danych logowania
+        if request.user.check_password(request.POST['CurrentPassword']) and password1 == password2:
+            #Zmień hasło
+            request.user.set_password(request.POST['NewPassword'])
+            request.user.save()
+            return render(request, "library/settings.html", {"error": "Hasło zostało zmienione"})
+        else:
+            return render(request, "library/settings.html", {"error": "Próba nie udana"})
