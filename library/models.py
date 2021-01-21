@@ -10,6 +10,10 @@ class Genre(models.Model):
     name = models.CharField(max_length=20, unique=True, null=False, blank=False)
     description = models.TextField(default='brak opisu')
 
+    class Meta:
+        verbose_name = 'Gatunek'
+        verbose_name_plural = 'Gatunki'
+
     def clean(self):
         from django.core.exceptions import ValidationError
         # Jeżeli nazwa książki jest pusta to zwróć wyjątek
@@ -33,6 +37,10 @@ class Author(models.Model):
     name = models.CharField(max_length=40, null=False)
     surrname = models.CharField(max_length=40, null=False,)
     nationality = models.TextField(max_length=50, default='narodowosc nieznana')
+
+    class Meta:
+        verbose_name = 'Autor'
+        verbose_name_plural = 'Autorzy'
 
     def clean(self):
         from django.core.exceptions import ValidationError
@@ -64,6 +72,10 @@ class Book(models.Model):
     description = models.TextField(default='brak opisu')
     image = models.ImageField(upload_to='book_images/', null=True, blank=True)
 
+    class Meta:
+        verbose_name = 'Książka'
+        verbose_name_plural = 'Książki'
+
     def clean(self):
         from django.core.exceptions import ValidationError
         # Jeżeli tytul książki jest pusta to zwróć wyjątek
@@ -72,7 +84,8 @@ class Book(models.Model):
         # Sprawdz czy ksiazka o tem tytule juz istnieje w bazie
         if self.title.lower() in [titles['title'].lower() for titles in
                                  Book.objects.all().values('title')]:
-            raise ValidationError('Ksiazka o tym tytule juz istnieje')
+            if Book.objects.get(title=self.title) != self:
+                raise ValidationError('Ksiazka o tym tytule juz istnieje')
 
     def save(self, *args, **kwargs):
         # Walidacja danych przed próbą zapisania
@@ -109,6 +122,10 @@ class BookCopy(models.Model):
     cover = models.CharField(max_length=20, choices=cover_types,
                              default='brak informacji')
 
+    class Meta:
+        verbose_name = 'Egzemplarz książki'
+        verbose_name_plural = 'Egzemplarze książek'
+
     def __str__(self):
         return self.book.title + " " + str(self.id)
 
@@ -117,22 +134,31 @@ class BorrowExtension(models.Model):
     days = models.IntegerField(default=0)
     extension_date = models.DateField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'Przedłużenie'
+        verbose_name_plural = 'Przedłużenia'
+
 
 class Borrow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
     borrow_date = models.DateField(default=None, null=False)
     return_date = models.DateField(default=None, null=True, blank=True)
-    borrow_extension = models.ForeignKey(BorrowExtension, on_delete=models.CASCADE, null=True, blank=True)
+    borrow_extension = models.ForeignKey(
+        BorrowExtension, on_delete=models.CASCADE, null=True, blank=True)
 
-    def extend(self, days: int = 7):
+    class Meta:
+        verbose_name = 'Wypożyczenie'
+        verbose_name_plural = 'Wypożyczenia'
+
+    def extend(self, days: int = 7) -> BorrowExtension:
         if self.borrow_extension is not None:
             raise ValidationError('Wypożycznie zostało już raz przedłużone')
         extension = BorrowExtension.objects.create(days=days)
         self.borrow_extension = extension
         return extension
 
-    def return_book(self):
+    def return_book(self) -> None:
         self.return_date = datetime.date.today()
         self.save()
 
@@ -152,14 +178,19 @@ class Borrow(models.Model):
 
 
 class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             verbose_name='użytkownik')
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     message = models.TextField(default='')
     read = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name = 'Powiadomienie'
+        verbose_name_plural = 'Powiadomienia'
+
     @classmethod
-    def notify(cls):
+    def notify(cls) -> None:
         today_date = datetime.date.today()
 
         borrows = Borrow.objects.filter(return_date=None)
