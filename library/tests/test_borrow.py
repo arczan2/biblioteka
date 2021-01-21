@@ -4,6 +4,7 @@ from library.models import Borrow, BookCopy, Book
 from django.core.exceptions import ValidationError
 import datetime
 
+
 class BorrowTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
@@ -36,4 +37,3 @@ class BorrowTestCase(TestCase):
         """
         Borrow.objects.create(user=self.user, book_copy=self.book_copy3)
         self.assertRaises(ValidationError, Borrow.objects.create, user=self.user, book_copy=self.book_copy3)
-
