@@ -24,7 +24,7 @@ class NotificationTestCase(TestCase):
                           user=self.user,
                           book_copy=self.book_copy)
 
-        borrow.borrow_date = datetime.date.today() - datetime.timedelta(days=5)
+        borrow.borrow_date = datetime.date.today() - datetime.timedelta(days=29)
         borrow.save()
         Notification.notify()
         notification = Notification.objects.get(user=self.user,

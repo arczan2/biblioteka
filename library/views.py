@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.views import View
 from django.shortcuts import render
-from .models import Book, Borrow, BookCopy
+from .models import Book, Borrow, BookCopy, Notification
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
@@ -134,3 +134,25 @@ class BorrowBookView(View):
         copy = BookCopy.objects.filter(book=book)[0]
         Borrow.objects.create(user=request.user, book_copy=copy)
         return HttpResponseRedirect(reverse('library:uimain'))
+
+
+@login_required
+def notifications(request):
+    notifications = Notification.objects.filter(
+        user=request.user).order_by('-pk')
+    return render(request, 'library/notifications.html',
+                  {'notifications': notifications})
+
+
+def genereate_notification(request):
+    """Wejście na ten adres uruchamia system powiadomień"""
+    Notification.notify()
+    return HttpResponse('Wysłano powiadomienia')
+
+
+def read_notifictaion(request, id: int):
+    """Oznacza powiadomienie jako przeczytane"""
+    notification = Notification.objects.get(pk=id)
+    notification.read = True
+    notification.save()
+    return HttpResponseRedirect(reverse('library:notifications'))

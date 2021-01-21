@@ -1,0 +1,26 @@
+{% extends 'library/ui_main.html' %}
+
+{% block content %}
+<table class="styled-table">
+    <tr>
+        <thead>
+        <th>Wiadomości</th>
+        <th></th>
+        </thead>
+    </tr>
+    <tbody>
+    {% for notification in notifications %}
+    <tr>
+        <td style="{% if not notification.read %}color: red;{% endif %}">
+            {{ notification.message }}
+        </td>
+        <td>
+            <a href="{% url 'library:read_notification' notification.pk %}">
+                Oznacz jako przeczytane
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

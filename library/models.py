@@ -155,6 +155,7 @@ class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
     message = models.TextField(default='')
+    read = models.BooleanField(default=False)
 
     @classmethod
     def notify(cls):
@@ -162,9 +163,15 @@ class Notification(models.Model):
 
         borrows = Borrow.objects.filter(return_date=None)
         for borrow in borrows:
-            if (today_date - borrow.borrow_date).days < 7:
+            if (today_date - borrow.borrow_date).days in (23, 27, 28, 29):
                 message = "Zostały ci {} dni do oddania książki {}".format(
-                    (today_date - borrow.borrow_date).days,
+                    30 - (today_date - borrow.borrow_date).days,
+                    borrow.book_copy.book.title
+                )
+                cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
+                                   message=message)
+            elif (today_date - borrow.borrow_date).days == 30:
+                message = "Jutro musisz oddać książkę {}!".format(
                     borrow.book_copy.book.title
                 )
                 cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,

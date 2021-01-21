@@ -17,4 +17,9 @@ urlpatterns = [
          name='user_book_details'),
     path('book/borrow/<int:id>', views.BorrowBookView.as_view(),
          name='borrow_book'),
+    path('notifications', views.notifications, name='notifications'),
+    path('dev/notificate', views.genereate_notification,
+         name='dev_generate_notifications'),
+    path('read_notification/<int:id>', views.read_notifictaion,
+         name='read_notification'),
 ]
