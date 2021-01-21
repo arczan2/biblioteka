@@ -26,14 +26,17 @@ class BorrowTestCase(TestCase):
         """
         Sprawdza czy poprawnnie oznacza oddane książki
         """
-        return_book = Borrow.objects.create(user=self.user, book_copy=self.book_copy2)
+        return_book = Borrow.objects.create(user=self.user,
+                                            book_copy=self.book_copy2)
         return_book.return_book()
         ID = return_book.id
-        self.assertEqual(Borrow.objects.get(id=ID).return_date, datetime.date.today())
+        self.assertEqual(Borrow.objects.get(id=ID).return_date,
+                         datetime.date.today())
 
     def test_if_cant_borrow_same_book_twice(self):
         """
         Sprawdza czy nie można wypożyczyć tej samej książki podwójnie
         """
         Borrow.objects.create(user=self.user, book_copy=self.book_copy3)
-        self.assertRaises(ValidationError, Borrow.objects.create, user=self.user, book_copy=self.book_copy3)
+        self.assertRaises(ValidationError, Borrow.objects.create,
+                          user=self.user, book_copy=self.book_copy3)

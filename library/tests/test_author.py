@@ -20,7 +20,6 @@ class AuthorTestCase(TestCase):
         self.assertRaises(Exception, Author.objects.create,
                           surrname="Sapkowski", nationality='Polska')
 
-
     def test_cant_add_author_without_surrname(self):
         """
         Sprawdza czy powiedzie się próba dodania osoby bez imienia

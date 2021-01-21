@@ -144,20 +144,21 @@ class Borrow(models.Model):
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
     borrow_date = models.DateField(default=None, null=False)
     return_date = models.DateField(default=None, null=True, blank=True)
-    borrow_extension = models.ForeignKey(BorrowExtension, on_delete=models.CASCADE, null=True, blank=True)
+    borrow_extension = models.ForeignKey(
+        BorrowExtension, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Wypożyczenie'
         verbose_name_plural = 'Wypożyczenia'
 
-    def extend(self, days: int = 7):
+    def extend(self, days: int = 7) -> BorrowExtension:
         if self.borrow_extension is not None:
             raise ValidationError('Wypożycznie zostało już raz przedłużone')
         extension = BorrowExtension.objects.create(days=days)
         self.borrow_extension = extension
         return extension
 
-    def return_book(self):
+    def return_book(self) -> None:
         self.return_date = datetime.date.today()
         self.save()
 
@@ -188,7 +189,7 @@ class Notification(models.Model):
         verbose_name_plural = 'Powiadomienia'
 
     @classmethod
-    def notify(cls):
+    def notify(cls) -> None:
         today_date = datetime.date.today()
 
         borrows = Borrow.objects.filter(return_date=None)
