@@ -154,6 +154,7 @@ class Borrow(models.Model):
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=True)
     message = models.TextField(default='')
     read = models.BooleanField(default=False)
 

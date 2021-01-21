@@ -373,6 +373,38 @@ color: #fff;
 }
 
 /* notygications*/
+.notif_read td
+{
+color: green;
+}
+
+
+.notif_no_read td
+{
+color: red;
+}
+
+.notif_read td a
+{
+  color: green;
+  font-size: 20px;
+}
+
+
+.notif_no_read td a
+{
+  color: red;
+  font-size: 20px;
+}
+
+.alert_notification i {
+  color: red;
+}
+
+
+
+
+
 .settings-form input[type='password']{
     border: 0;
     border-bottom: 1px solid #b4becb;
