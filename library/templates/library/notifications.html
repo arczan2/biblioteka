@@ -4,19 +4,23 @@
 <table class="styled-table">
     <tr>
         <thead>
-        <th>Wiadomości</th>
-        <th></th>
+        <th>Wiadomośc\ć</th>
+        <th>Data</th>
+        <th>Przeczytano?</th>
         </thead>
     </tr>
     <tbody>
     {% for notification in notifications %}
-    <tr>
-        <td style="{% if not notification.read %}color: red;{% endif %}">
+    <tr class="{% if not notification.read %}notif_no_read{% else %}notif_read{% endif %}">
+        <td >
             {{ notification.message }}
         </td>
+        <td >
+            {{ notification.date }}
+        </td>
         <td>
-            <a href="{% url 'library:read_notification' notification.pk %}">
-                Oznacz jako przeczytane
+            <a  href="{% url 'library:read_notification' notification.pk %}">
+              {% if not notification.read %}	&#10006{% else %}&#10004{% endif %}
             </a>
         </td>
     </tr>
