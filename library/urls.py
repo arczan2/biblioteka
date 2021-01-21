@@ -21,5 +21,7 @@ urlpatterns = [
          name='dev_generate_notifications'),
     path('read_notification/<int:id>', views.read_notifictaion,
          name='read_notification'),
+    path('notification', views.notifications,
+         name='notifications'),
     path('settings', views.SettingsView.as_view(), name='settings'),
 ]
