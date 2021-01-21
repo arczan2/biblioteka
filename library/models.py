@@ -7,8 +7,8 @@ from django.utils import timezone
 
 
 class Genre(models.Model):
-    name = models.CharField(max_length=20, unique=True, null=False, blank=False)
-    description = models.TextField(default='brak opisu')
+    name = models.CharField(max_length=20, unique=True, null=False, blank=False, verbose_name="Gatunek")
+    description = models.TextField(default='brak opisu', verbose_name="Opis")
 
     class Meta:
         verbose_name = 'Gatunek'
@@ -34,12 +34,12 @@ class Genre(models.Model):
 
 
 class Author(models.Model):
-    name = models.CharField(max_length=40, null=False)
-    surrname = models.CharField(max_length=40, null=False,)
-    nationality = models.TextField(max_length=50, default='narodowosc nieznana')
+    name = models.CharField(max_length=40, null=False, verbose_name="Imię")
+    surrname = models.CharField(max_length=40, null=False, verbose_name="Nazwisko")
+    nationality = models.TextField(max_length=50, default='narodowosc nieznana', verbose_name="Narodowość")
 
     class Meta:
-        verbose_name = 'Autor'
+        verbose_name = 'Autora'
         verbose_name_plural = 'Autorzy'
 
     def clean(self):
@@ -63,14 +63,14 @@ class Author(models.Model):
 
 
 class Book(models.Model):
-    title = models.CharField(max_length=40)
-    pages = models.IntegerField()
+    title = models.CharField(max_length=40, verbose_name="Tytuł")
+    pages = models.IntegerField(verbose_name="Ilość stron")
     genre = models.ForeignKey(Genre, null=True, on_delete=models.SET_NULL,
-                              blank=True)
+                              blank=True, verbose_name="Gatunek")
     author = models.ForeignKey(Author, null=True, on_delete=models.SET_NULL,
-                               blank=True)
-    description = models.TextField(default='brak opisu')
-    image = models.ImageField(upload_to='book_images/', null=True, blank=True)
+                               blank=True, verbose_name="Autor")
+    description = models.TextField(default='brak opisu', verbose_name="Opis")
+    image = models.ImageField(upload_to='book_images/', null=True, blank=True, verbose_name="Ilustracja okładki")
 
     class Meta:
         verbose_name = 'Książka'
@@ -116,11 +116,11 @@ class BookCopy(models.Model):
         ('miękka', 'miękka'),
         ('twarda', 'twarda'),
     )
-    year = models.IntegerField(default=2020)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    condition = models.CharField(max_length=100, default='brak informacji')
+    year = models.IntegerField(default=2020, verbose_name="Rok wydania")
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name="Książka")
+    condition = models.CharField(max_length=100, default='brak informacji', verbose_name="Stan książki")
     cover = models.CharField(max_length=20, choices=cover_types,
-                             default='brak informacji')
+                             default='brak informacji', verbose_name="Typ okładki")
 
     class Meta:
         verbose_name = 'Egzemplarz książki'
@@ -131,8 +131,8 @@ class BookCopy(models.Model):
 
 
 class BorrowExtension(models.Model):
-    days = models.IntegerField(default=0)
-    extension_date = models.DateField(auto_now_add=True)
+    days = models.IntegerField(default=0, verbose_name="Dni przedłużenia")
+    extension_date = models.DateField(auto_now_add=True, verbose_name="Data przedłuzenia")
 
     class Meta:
         verbose_name = 'Przedłużenie'
@@ -140,12 +140,12 @@ class BorrowExtension(models.Model):
 
 
 class Borrow(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
-    borrow_date = models.DateField(default=None, null=False)
-    return_date = models.DateField(default=None, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik")
+    book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE, verbose_name="Egzemplarz książki")
+    borrow_date = models.DateField(default=None, null=False, verbose_name="Data wypożyczenia")
+    return_date = models.DateField(default=None, null=True, blank=True, verbose_name="Data oddania")
     borrow_extension = models.ForeignKey(
-        BorrowExtension, on_delete=models.CASCADE, null=True, blank=True)
+        BorrowExtension, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Przedłużenie wypożyczenia")
 
     class Meta:
         verbose_name = 'Wypożyczenie'
@@ -153,7 +153,7 @@ class Borrow(models.Model):
 
     def extend(self, days: int = 7) -> BorrowExtension:
         if self.borrow_extension is not None:
-            raise ValidationError('Wypożycznie zostało już raz przedłużone')
+            raise ValidationError('Wypożyczenie zostało już raz przedłużone')
         extension = BorrowExtension.objects.create(days=days)
         self.borrow_extension = extension
         return extension
@@ -179,11 +179,11 @@ class Borrow(models.Model):
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,
-                             verbose_name='użytkownik')
-    book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
-    message = models.TextField(default='')
-    read = models.BooleanField(default=False)
+                             verbose_name='Użytkownik')
+    book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE, verbose_name="Egzemplarz książki")
+    date = models.DateField(auto_now_add=True, verbose_name="Data")
+    message = models.TextField(default='', verbose_name="Wiadomość")
+    read = models.BooleanField(default=False, verbose_name="Czy odczytano?")
 
     class Meta:
         verbose_name = 'Powiadomienie'
