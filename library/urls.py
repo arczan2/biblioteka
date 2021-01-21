@@ -17,4 +17,5 @@ urlpatterns = [
          name='user_book_details'),
     path('book/borrow/<int:id>', views.BorrowBookView.as_view(),
          name='borrow_book'),
+    path('settings', views.SettingsView.as_view(), name='settings')
 ]

@@ -144,3 +144,23 @@ class BorrowBookView(View):
         copy = BookCopy.objects.filter(book=book)[0]
         Borrow.objects.create(user=request.user, book_copy=copy)
         return HttpResponseRedirect(reverse('library:uimain'))
+
+
+class SettingsView(View):
+    """Wyświetla widok ustawień"""
+    def get(self, request):
+        return render(request, 'library/settings.html')
+
+    def post(self, request):
+        # Pobierz hasła
+        password = request.POST['CurrentPassword']
+        password1 = request.POST['NewPassword']
+        password2 = request.POST['ValidNewPassword']
+        # Wyszukanie użytkownika o podanych danych logowania
+        if request.user.check_password(request.POST['CurrentPassword']) and password1 == password2:
+            #Zmień hasło
+            request.user.set_password(request.POST['NewPassword'])
+            request.user.save()
+            return render(request, "library/settings.html", {"error": "Hasło zostało zmienione"})
+        else:
+            return render(request, "library/settings.html", {"error": "Próba nie udana"})

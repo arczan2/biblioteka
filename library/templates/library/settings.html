@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'library/ui_main.html' %}
+
+{% block content %}
+    <h1>Zmiana hasła</h1>
+<form method="post" action="{% url 'library:settings' %}">
+<input type="password" name="CurrentPassword" placeholder="Podaj stare hasło"> <br/><br/>
+<input type="password" name="NewPassword" placeholder="Podaj nowe hasło"><br/><br/>
+<input type="password" name="ValidNewPassword" placeholder="Potwierdź nowe hasło"><br/><br/>
+<input type="submit" class="btn" value="Potwierdź">
+{% csrf_token %} <br><br>
+{{ error }}
+
+</form>
+{% endblock %}
