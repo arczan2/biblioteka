@@ -51,13 +51,13 @@ class Author(models.Model):
     ----------
     name : str
         Imię
-    surrname : str
+    surname : str
         Nazwisko
     nationality : str
         Narodowość
     """
     name = models.CharField(max_length=40, null=False)
-    surrname = models.CharField(max_length=40, null=False,)
+    surname = models.CharField(max_length=40, null=False,)
     nationality = models.TextField(max_length=50, default='narodowosc nieznana')
 
     class Meta:
@@ -67,12 +67,12 @@ class Author(models.Model):
     def clean(self):
         from django.core.exceptions import ValidationError
 
-        if self.name is None or self.name == '' or self.surrname is None or self.surrname == '':
+        if self.name is None or self.name == '' or self.surname is None or self.surname == '':
             raise ValidationError('Imię i nazwisko to pola wymagane i nie mogą byc puste')
 
         if self.name.lower() in [names['name'].lower() for names in
-            Author.objects.all().values('name')] and self.surrname.lower() in [surrnames['surrname'].lower() for surrnames in
-            Author.objects.all().values('surrname')] and self.nationality.lower() in [nationalities['nationality'].lower() for nationalities in
+            Author.objects.all().values('name')] and self.surname.lower() in [surnames['surrname'].lower() for surnames in
+            Author.objects.all().values('surname')] and self.nationality.lower() in [nationalities['nationality'].lower() for nationalities in
             Author.objects.all().values('nationality')]:
                 raise ValidationError('Taka osoba już istnieje w bazie autorów')
 
@@ -81,7 +81,7 @@ class Author(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.name + " " + self.surrname
+        return self.name + " " + self.surname
 
 
 class Book(models.Model):
@@ -184,15 +184,6 @@ class BookCopy(models.Model):
         return self.book.title + " " + str(self.id)
 
 
-class BorrowExtension(models.Model):
-    days = models.IntegerField(default=0)
-    extension_date = models.DateField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = 'Przedłużenie'
-        verbose_name_plural = 'Przedłużenia'
-
-
 class Borrow(models.Model):
     """
     Klasa reprezentuje wypożyczenie książki przez czytelnika
@@ -214,19 +205,10 @@ class Borrow(models.Model):
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
     borrow_date = models.DateField(default=None, null=False)
     return_date = models.DateField(default=None, null=True, blank=True)
-    borrow_extension = models.ForeignKey(
-        BorrowExtension, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Wypożyczenie'
         verbose_name_plural = 'Wypożyczenia'
-
-    def extend(self, days: int = 7) -> BorrowExtension:
-        if self.borrow_extension is not None:
-            raise ValidationError('Wypożycznie zostało już raz przedłużone')
-        extension = BorrowExtension.objects.create(days=days)
-        self.borrow_extension = extension
-        return extension
 
     def return_book(self) -> None:
         self.return_date = datetime.date.today()

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Genre, Author, Book, BookCopy, Borrow, BorrowExtension
+from .models import Genre, Author, Book, BookCopy, Borrow
 from .models import Notification
 
 
@@ -23,5 +23,4 @@ admin.site.register(Author)
 admin.site.register(Book, BookAdmin)
 admin.site.register(BookCopy)
 admin.site.register(Borrow, BorrowAdmin)
-admin.site.register(BorrowExtension)
 admin.site.register(Notification)
