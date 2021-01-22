@@ -90,7 +90,7 @@ def ui_main(request):
         i += 1
     for borrow in borrows:
         deadline = datetime.now().date() - borrow.borrow_date
-        borrow.days = abs(deadline.days - 30)
+        borrow.days = -(deadline.days - 30)
         if borrow.return_date is not None:
             borrow.days = ''
 
@@ -134,7 +134,8 @@ class UserBookListView(View):
 class UserBookDetailsView(View):
     """ Wyświetla informacje o książce """
     def get(self, request, id: int):
-        user_borrow_count = Borrow.objects.filter(user=request.user, return_date=None)
+        user_borrow_count = Borrow.objects.filter(user=request.user,
+                                                  return_date=None)
         book = Book.objects.get(pk=id)
         return render(request, 'library/user_book_details.html',
                       {'book': book, 'can_borrow': book.can_borrow(),
@@ -144,8 +145,14 @@ class UserBookDetailsView(View):
 class BorrowBookView(View):
     def get(self, request, id: int):
         book = Book.objects.get(pk=id)
-        copy = BookCopy.objects.filter(book=book)[0]
-        Borrow.objects.create(user=request.user, book_copy=copy)
+        copies = BookCopy.objects.filter(book=book)
+        book_copy = None
+        for copy in copies:
+            if len(Borrow.objects.filter(book_copy=copy,
+                                         return_date=None)) == 0:
+                book_copy = copy
+                break
+        Borrow.objects.create(user=request.user, book_copy=book_copy)
         return HttpResponseRedirect(reverse('library:uimain'))
 
 

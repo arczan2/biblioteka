@@ -258,21 +258,38 @@ class Notification(models.Model):
         verbose_name = 'Powiadomienie'
         verbose_name_plural = 'Powiadomienia'
 
+    def __str__(self):
+        return "{} - {} - {}".format(self.user.username, self.date,
+                                     self.message)
+
     @classmethod
     def notify(cls) -> None:
         today_date = datetime.date.today()
 
         borrows = Borrow.objects.filter(return_date=None)
         for borrow in borrows:
-            if (today_date - borrow.borrow_date).days in (23, 27, 28, 29):
+            if (today_date - borrow.borrow_date).days in (23, 27, 28):
                 message = "Zostały ci {} dni do oddania książki {}".format(
                     30 - (today_date - borrow.borrow_date).days,
                     borrow.book_copy.book.title
                 )
                 cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
                                    message=message)
+            elif (today_date - borrow.borrow_date).days == 29:
+                message = "Został ci 1 dzień do oddania książki {}".format(
+                    borrow.book_copy.book.title
+                )
+                cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
+                                   message=message)
             elif (today_date - borrow.borrow_date).days == 30:
                 message = "Jutro musisz oddać książkę {}!".format(
+                    borrow.book_copy.book.title
+                )
+                cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
+                                   message=message)
+            elif (today_date - borrow.borrow_date).days > 30:
+                message = "Spóźniasz się {} dni z oddaniem książki {}".format(
+                    (today_date - borrow.borrow_date).days - 30,
                     borrow.book_copy.book.title
                 )
                 cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
