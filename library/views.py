@@ -1,5 +1,4 @@
 from operator import attrgetter
-
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.views import View
@@ -29,10 +28,12 @@ class LoginView(View):
             login(request, user)
             return HttpResponseRedirect(reverse('library:uimain'))
         else:
-            return render(request, "library/index.html", {"error": "Błędny login lub hasło"})
+            return render(request, "library/index.html",
+                          {"error": "Błędny login lub hasło"})
 
 
 class LogoutView(View):
+    """ Wylogowuje użytkownika """
     def get(self, request):
         logout(request)
         return HttpResponseRedirect(reverse('library:frontpage'))
@@ -54,7 +55,7 @@ class BookListView(View):
         books_list = list()
         if name:
             for book in books:
-                if name in book.title:
+                if name.lower() in book.title.lower():
                     books_list.append(book)
             books = books_list
 
@@ -68,10 +69,6 @@ class BookDetailsView(View):
         return render(request, 'library/book_details.html', {'book': book})
 
 
-class MyBorrowList(View):
-    pass
-
-
 def home(request):
     return render(request, 'library/index.html')
 
@@ -82,7 +79,9 @@ def register(request):
 
 @login_required
 def ui_main(request):
-    borrows = list(Borrow.objects.filter(user=request.user).order_by("-return_date"))
+    borrows = list(Borrow.objects.filter(user=request.user).order_by(
+        "-return_date"))
+
     if len(borrows) <= 0:
         return render(request, 'library/borrows.html', {'borrows': borrows})
     i =0
@@ -99,12 +98,14 @@ def ui_main(request):
 
 
 class RegistrationView(View):
+    """ Dokonuje rejestracji użytkownika """
     def post(self, request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
 
-        return render(request, 'library/registration.html', {'form': RegisterForm})
+        return render(request, 'library/registration.html',
+                      {'form': RegisterForm})
 
     def get(self, request):
         form = RegisterForm
@@ -114,6 +115,7 @@ class RegistrationView(View):
 class UserBookListView(View):
     """ Wyświetla listę książek """
     def get(self, request):
+        # Znajdź wszystkie książki
         books = Book.objects.all()
         name = None
         if 'search' in request.GET:
@@ -122,7 +124,7 @@ class UserBookListView(View):
         books_list = list()
         if name:
             for book in books:
-                if name in book.title:
+                if name.lower() in book.title.lower():
                     books_list.append(book)
             books = books_list
 
@@ -135,7 +137,8 @@ class UserBookDetailsView(View):
         user_borrow_count = Borrow.objects.filter(user=request.user, return_date=None)
         book = Book.objects.get(pk=id)
         return render(request, 'library/user_book_details.html',
-                      {'book': book, 'can_borrow': book.can_borrow(), "user_borrow_count": len(user_borrow_count)})
+                      {'book': book, 'can_borrow': book.can_borrow(),
+                       "user_borrow_count": len(user_borrow_count)})
 
 
 class BorrowBookView(View):
@@ -169,19 +172,21 @@ def read_notifictaion(request, id: int):
 
 
 class SettingsView(View):
-    """Wyświetla widok ustawień"""
+    """ Umożliwia zmianę hasła """
     def get(self, request):
+        """ Wyświetla formularz zmiany hasła """
         return render(request, 'library/settings.html')
 
     def post(self, request):
+        """ Przetwarza formularz zmiany hasła """
         # Pobierz hasła
         password = request.POST['CurrentPassword']
         password1 = request.POST['NewPassword']
         password2 = request.POST['ValidNewPassword']
         # Wyszukanie użytkownika o podanych danych logowania
-        if request.user.check_password(request.POST['CurrentPassword']) and password1 == password2:
-            #Zmień hasło
-            request.user.set_password(request.POST['NewPassword'])
+        if request.user.check_password(password) and password1 == password2:
+            # Zmiana hasła
+            request.user.set_password(password1)
             request.user.save()
             return render(request, "library/settings.html",
                           {"error": "Hasło zostało zmienione"})

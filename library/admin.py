@@ -4,7 +4,8 @@ from .models import Notification
 
 
 class BorrowAdmin(admin.ModelAdmin):
-    list_filter = ['borrow_date']
+    list_filter = ['borrow_date', 'user']
+    search_fields = ['user__username']
 
 
 class BookCopyInline(admin.TabularInline):

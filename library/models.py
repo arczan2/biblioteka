@@ -7,6 +7,16 @@ from django.utils import timezone
 
 
 class Genre(models.Model):
+    """
+    Klasa reprezentuje gatunek książki
+
+    Attributes
+    ----------
+    name : str
+        Nazwa gatunku(np. "Horror")
+    description : str
+        Opis
+    """
     name = models.CharField(max_length=20, unique=True, null=False, blank=False)
     description = models.TextField(default='brak opisu')
 
@@ -34,6 +44,18 @@ class Genre(models.Model):
 
 
 class Author(models.Model):
+    """
+    Klasa reprezentuje autora książek
+
+    Attributes
+    ----------
+    name : str
+        Imię
+    surrname : str
+        Nazwisko
+    nationality : str
+        Narodowość
+    """
     name = models.CharField(max_length=40, null=False)
     surrname = models.CharField(max_length=40, null=False,)
     nationality = models.TextField(max_length=50, default='narodowosc nieznana')
@@ -63,6 +85,24 @@ class Author(models.Model):
 
 
 class Book(models.Model):
+    """
+    Klasa reprezentuje książkę
+
+    Attributes
+    ----------
+    title : str
+        Tytuł
+    pages : int
+        Liczba stron
+    genre : Genre
+        Gatunek książki
+    author : Author
+        Gatunek książki
+    description : str
+        Opis
+    image : Image
+        Zdjęcie okładki
+    """
     title = models.CharField(max_length=40)
     pages = models.IntegerField()
     genre = models.ForeignKey(Genre, null=True, on_delete=models.SET_NULL,
@@ -111,6 +151,20 @@ class Book(models.Model):
 
 
 class BookCopy(models.Model):
+    """
+    Klasa reprezentuje egzemplarz książki
+
+    Attributes
+    ----------
+    year : int
+        Rok wydania
+    book : Book
+        Książka której kopią jest dany egzemplarz
+    condition : str
+        Stan egzemplarza, dowolny opis(np. "Lekko naderwana okładka")
+    cover : str
+        Typ oprawy(do wyboru z cover_types)
+    """
     cover_types = (
         ('brak informacji', 'brak informacji'),
         ('miękka', 'miękka'),
@@ -140,6 +194,22 @@ class BorrowExtension(models.Model):
 
 
 class Borrow(models.Model):
+    """
+    Klasa reprezentuje wypożyczenie książki przez czytelnika
+
+    Attributes
+    ----------
+    user : User
+        Użytkownik, który wypożyczył książkę
+    book_copy : BookCopy
+        Wypożyczony egzemplarz
+    borrow_date : datetime.date
+        Data wypożyczenia
+    return_date : datetime.date
+        Data oddania
+    cover : str
+        Typ oprawy(do wyboru z cover_types)
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
     borrow_date = models.DateField(default=None, null=False)
@@ -164,7 +234,8 @@ class Borrow(models.Model):
 
     def clean(self):
         if Borrow.objects.filter(book_copy=self.book_copy, return_date=None).exists() and self.return_date is None:
-            if Borrow.objects.get(book_copy=self.book_copy, return_date=None) != self:
+            if Borrow.objects.get(book_copy=self.book_copy,
+                                  return_date=None) != self:
                 raise ValidationError('Wypożyczono już tą książkę')
 
     def save(self, *args, **kwargs):
@@ -178,6 +249,22 @@ class Borrow(models.Model):
 
 
 class Notification(models.Model):
+    """
+    Klasa reprezentuje powiadomienie
+
+    Attributes
+    ----------
+    user : User
+        Użytkownik, do którego skierowane jest powiadomienie
+    book_copy : BookCopy
+        Egzemplarz książki, którego dodtyczy wypożyczenie
+    date : datetime.date
+        Data wysłania
+    message : str
+        Treść powiadomienia
+    read : bool
+        Czy powiadomienie zostało odczytane?
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              verbose_name='użytkownik')
     book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE)
