@@ -196,7 +196,7 @@ class SettingsView(View):
             request.user.set_password(password1)
             request.user.save()
             return render(request, "library/settings.html",
-                          {"error": "Hasło zostało zmienione"})
+                          {"good": "Hasło zostało zmienione"})
         else:
             return render(request, "library/settings.html",
                           {"error": "Próba nie udana"})

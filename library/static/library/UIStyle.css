@@ -269,6 +269,17 @@ color: #fff;
   margin-top: 25px;
 }
 
+.alert-success {
+  text-align: center;
+  background-color: #5cb85c;
+  color: #fff;
+  font-weight: bold;
+  font-size: 15px;
+  width: 240px;
+  padding: 10px;
+  margin-top: 25px;
+}
+
 .details img
 {
    max-height: 390px;

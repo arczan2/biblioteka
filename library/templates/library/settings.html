@@ -8,9 +8,18 @@
 <input type="password" name="NewPassword" placeholder="Podaj nowe hasło"><br/><br/>
 <input type="password" name="ValidNewPassword" placeholder="Potwierdź nowe hasło"><br/><br/>
 <input type="submit" class="btn" value="Potwierdź">
-{% csrf_token %} <br><br>
-{{ error }}
+{% csrf_token %} <br>
 
+    {% if error %}
+        <div class="alert alert-error">
+            {{ error }}
+        </div>
+    {% endif %}
+  {% if good %}
+        <div class="alert alert-success">
+            {{ good }}
+        </div>
+    {% endif %}
 </form>
     </div>
 {% endblock %}
