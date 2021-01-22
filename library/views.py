@@ -79,15 +79,18 @@ def register(request):
 
 @login_required
 def ui_main(request):
+    """ Panel użytkownika, wyświetla historię wypożyczeń """
     borrows = list(Borrow.objects.filter(user=request.user).order_by(
         "-return_date"))
 
     if len(borrows) <= 0:
         return render(request, 'library/borrows.html', {'borrows': borrows})
-    i =0
-    while borrows[len(borrows) - 1].return_date is None and i<3:
+    i = 0
+    # Przenieś nieoddane książki na początek
+    while borrows[len(borrows) - 1].return_date is None and i < 3:
         borrows.insert(0, borrows.pop())
         i += 1
+    # Oblicz dni do końca czasu wypożyczenia
     for borrow in borrows:
         deadline = datetime.now().date() - borrow.borrow_date
         borrow.days = -(deadline.days - 30)

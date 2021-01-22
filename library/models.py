@@ -17,7 +17,8 @@ class Genre(models.Model):
     description : str
         Opis
     """
-    name = models.CharField(max_length=20, unique=True, null=False, blank=False, verbose_name="Gatunek")
+    name = models.CharField(max_length=20, unique=True, null=False, blank=False,
+                            verbose_name="Gatunek")
     description = models.TextField(default='brak opisu', verbose_name="Opis")
 
     class Meta:
@@ -112,7 +113,8 @@ class Book(models.Model):
     author = models.ForeignKey(Author, null=True, on_delete=models.SET_NULL,
                                blank=True, verbose_name="Autor")
     description = models.TextField(default='brak opisu', verbose_name="Opis")
-    image = models.ImageField(upload_to='book_images/', null=True, blank=True, verbose_name="Ilustracja okładki")
+    image = models.ImageField(upload_to='book_images/', null=True, blank=True,
+                              verbose_name="Ilustracja okładki")
 
     class Meta:
         verbose_name = 'Książka'
@@ -224,7 +226,8 @@ class Borrow(models.Model):
         self.save()
 
     def clean(self):
-        if Borrow.objects.filter(book_copy=self.book_copy, return_date=None).exists() and self.return_date is None:
+        if Borrow.objects.filter(book_copy=self.book_copy, return_date=None)\
+                .exists() and self.return_date is None:
             if Borrow.objects.get(book_copy=self.book_copy,
                                   return_date=None) != self:
                 raise ValidationError('Wypożyczono już tą książkę')
@@ -286,13 +289,13 @@ class Notification(models.Model):
                 cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
                                    message=message)
             elif (today_date - borrow.borrow_date).days == 29:
-                message = "Został ci 1 dzień do oddania książki {}".format(
+                message = "Jutro musisz oddać {}".format(
                     borrow.book_copy.book.title
                 )
                 cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
                                    message=message)
             elif (today_date - borrow.borrow_date).days == 30:
-                message = "Jutro musisz oddać książkę {}!".format(
+                message = "Dzisiaj musisz oddać książkę {}!".format(
                     borrow.book_copy.book.title
                 )
                 cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
