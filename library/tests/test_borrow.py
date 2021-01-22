@@ -33,7 +33,7 @@ class BorrowTestCase(TestCase):
         self.assertEqual(Borrow.objects.get(id=ID).return_date,
                          datetime.date.today())
 
-    def test_if_cant_borrow_same_book_twice(self):
+    def test_if_cant_borrow_same_book_copy_twice(self):
         """
         Sprawdza czy nie można wypożyczyć tej samej książki podwójnie
         """

@@ -8,19 +8,19 @@ class AuthorTestCase(TestCase):
         """
          Sprawdza czy dodanie identycznego akrota zwróci wyjątek
         """
-        Author.objects.create(name='Adam', surrname='Mickiewicz',
+        Author.objects.create(name='Adam', surname='Mickiewicz',
                               nationality='Polska')
         self.assertRaises(Exception, Author.objects.create,name='Adam',
-                          surrname='Mickiewicz', nationality='Polska')
+                          surname='Mickiewicz', nationality='Polska')
 
     def test_cant_add_author_without_name(self):
         """
          Sprawdza czy powiedzie się próba dodania osoby bez imienia
         """
         self.assertRaises(Exception, Author.objects.create,
-                          surrname="Sapkowski", nationality='Polska')
+                          surname="Sapkowski", nationality='Polska')
 
-    def test_cant_add_author_without_surrname(self):
+    def test_cant_add_author_without_surname(self):
         """
         Sprawdza czy powiedzie się próba dodania osoby bez imienia
         """
@@ -33,7 +33,7 @@ class AuthorTestCase(TestCase):
         zostaną usunięte i czy ich relacja do autora zostanie ustawiona na 
         None
         """
-        author = Author.objects.create(name='Arek', surrname='Darek',
+        author = Author.objects.create(name='Arek', surname='Darek',
                                        nationality='USA')
         book = Book.objects.create(title='Book1', pages=333, author=author)
         self.assertEqual(book.author, author)

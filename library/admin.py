@@ -1,10 +1,12 @@
 from django.contrib import admin
-from .models import Genre, Author, Book, BookCopy, Borrow, BorrowExtension
+from .models import Genre, Author, Book, BookCopy, Borrow
 from .models import Notification
 
 
 class BorrowAdmin(admin.ModelAdmin):
-    list_filter = ['borrow_date']
+    list_filter = ['borrow_date', 'user']
+    search_fields = ['user__username']
+    list_display = ('book_copy', 'user', 'borrow_date', 'return_date',)
 
 
 class BookCopyInline(admin.TabularInline):
@@ -14,13 +16,21 @@ class BookCopyInline(admin.TabularInline):
 
 class BookAdmin(admin.ModelAdmin):
     search_fields = ['title']
+    list_display = ('title', 'genre', 'author', )
     inlines = [BookCopyInline]
+
+
+class BookCopyAdmin(admin.ModelAdmin):
+    list_display = ('book', 'id')
+
+
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('message', 'user', 'date')
 
 
 admin.site.register(Genre)
 admin.site.register(Author)
 admin.site.register(Book, BookAdmin)
-admin.site.register(BookCopy)
+admin.site.register(BookCopy, BookCopyAdmin)
 admin.site.register(Borrow, BorrowAdmin)
-admin.site.register(BorrowExtension)
-admin.site.register(Notification)
+admin.site.register(Notification, NotificationAdmin)

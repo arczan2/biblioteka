@@ -7,6 +7,16 @@ from django.utils import timezone
 
 
 class Genre(models.Model):
+    """
+    Klasa reprezentuje gatunek książki
+
+    Attributes
+    ----------
+    name : str
+        Nazwa gatunku(np. "Horror")
+    description : str
+        Opis
+    """
     name = models.CharField(max_length=20, unique=True, null=False, blank=False, verbose_name="Gatunek")
     description = models.TextField(default='brak opisu', verbose_name="Opis")
 
@@ -34,9 +44,23 @@ class Genre(models.Model):
 
 
 class Author(models.Model):
+    """
+    Klasa reprezentuje autora książek
+
+    Attributes
+    ----------
+    name : str
+        Imię
+    surname : str
+        Nazwisko
+    nationality : str
+        Narodowość
+    """
     name = models.CharField(max_length=40, null=False, verbose_name="Imię")
-    surrname = models.CharField(max_length=40, null=False, verbose_name="Nazwisko")
-    nationality = models.TextField(max_length=50, default='narodowosc nieznana', verbose_name="Narodowość")
+    surname = models.CharField(max_length=40, null=False,
+                               verbose_name="Nazwisko")
+    nationality = models.TextField(max_length=50, default='narodowosc nieznana',
+                                   verbose_name="Narodowość")
 
     class Meta:
         verbose_name = 'Autora'
@@ -45,12 +69,12 @@ class Author(models.Model):
     def clean(self):
         from django.core.exceptions import ValidationError
 
-        if self.name is None or self.name == '' or self.surrname is None or self.surrname == '':
+        if self.name is None or self.name == '' or self.surname is None or self.surname == '':
             raise ValidationError('Imię i nazwisko to pola wymagane i nie mogą byc puste')
 
         if self.name.lower() in [names['name'].lower() for names in
-            Author.objects.all().values('name')] and self.surrname.lower() in [surrnames['surrname'].lower() for surrnames in
-            Author.objects.all().values('surrname')] and self.nationality.lower() in [nationalities['nationality'].lower() for nationalities in
+            Author.objects.all().values('name')] and self.surname.lower() in [surnames['surrname'].lower() for surnames in
+            Author.objects.all().values('surname')] and self.nationality.lower() in [nationalities['nationality'].lower() for nationalities in
             Author.objects.all().values('nationality')]:
                 raise ValidationError('Taka osoba już istnieje w bazie autorów')
 
@@ -59,10 +83,28 @@ class Author(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.name + " " + self.surrname
+        return self.name + " " + self.surname
 
 
 class Book(models.Model):
+    """
+    Klasa reprezentuje książkę
+
+    Attributes
+    ----------
+    title : str
+        Tytuł
+    pages : int
+        Liczba stron
+    genre : Genre
+        Gatunek książki
+    author : Author
+        Gatunek książki
+    description : str
+        Opis
+    image : Image
+        Zdjęcie okładki
+    """
     title = models.CharField(max_length=40, verbose_name="Tytuł")
     pages = models.IntegerField(verbose_name="Ilość stron")
     genre = models.ForeignKey(Genre, null=True, on_delete=models.SET_NULL,
@@ -111,16 +153,33 @@ class Book(models.Model):
 
 
 class BookCopy(models.Model):
+    """
+    Klasa reprezentuje egzemplarz książki
+
+    Attributes
+    ----------
+    year : int
+        Rok wydania
+    book : Book
+        Książka której kopią jest dany egzemplarz
+    condition : str
+        Stan egzemplarza, dowolny opis(np. "Lekko naderwana okładka")
+    cover : str
+        Typ oprawy(do wyboru z cover_types)
+    """
     cover_types = (
         ('brak informacji', 'brak informacji'),
         ('miękka', 'miękka'),
         ('twarda', 'twarda'),
     )
     year = models.IntegerField(default=2020, verbose_name="Rok wydania")
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name="Książka")
-    condition = models.CharField(max_length=100, default='brak informacji', verbose_name="Stan książki")
+    book = models.ForeignKey(Book, on_delete=models.CASCADE,
+                             verbose_name="Książka")
+    condition = models.CharField(max_length=100, default='brak informacji',
+                                 verbose_name="Stan książki")
     cover = models.CharField(max_length=20, choices=cover_types,
-                             default='brak informacji', verbose_name="Typ okładki")
+                             default='brak informacji',
+                             verbose_name="Typ okładki")
 
     class Meta:
         verbose_name = 'Egzemplarz książki'
@@ -130,33 +189,35 @@ class BookCopy(models.Model):
         return self.book.title + " " + str(self.id)
 
 
-class BorrowExtension(models.Model):
-    days = models.IntegerField(default=0, verbose_name="Dni przedłużenia")
-    extension_date = models.DateField(auto_now_add=True, verbose_name="Data przedłuzenia")
-
-    class Meta:
-        verbose_name = 'Przedłużenie'
-        verbose_name_plural = 'Przedłużenia'
-
-
 class Borrow(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Użytkownik")
-    book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE, verbose_name="Egzemplarz książki")
-    borrow_date = models.DateField(default=None, null=False, verbose_name="Data wypożyczenia")
-    return_date = models.DateField(default=None, null=True, blank=True, verbose_name="Data oddania")
-    borrow_extension = models.ForeignKey(
-        BorrowExtension, on_delete=models.CASCADE, null=True, blank=True, verbose_name="Przedłużenie wypożyczenia")
+    """
+    Klasa reprezentuje wypożyczenie książki przez czytelnika
+
+    Attributes
+    ----------
+    user : User
+        Użytkownik, który wypożyczył książkę
+    book_copy : BookCopy
+        Wypożyczony egzemplarz
+    borrow_date : datetime.date
+        Data wypożyczenia
+    return_date : datetime.date
+        Data oddania
+    cover : str
+        Typ oprawy(do wyboru z cover_types)
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             verbose_name="Użytkownik")
+    book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE,
+                                  verbose_name="Egzemplarz książki")
+    borrow_date = models.DateField(default=None, null=False,
+                                   verbose_name="Data wypożyczenia")
+    return_date = models.DateField(default=None, null=True, blank=True,
+                                   verbose_name="Data oddania")
 
     class Meta:
         verbose_name = 'Wypożyczenie'
         verbose_name_plural = 'Wypożyczenia'
-
-    def extend(self, days: int = 7) -> BorrowExtension:
-        if self.borrow_extension is not None:
-            raise ValidationError('Wypożyczenie zostało już raz przedłużone')
-        extension = BorrowExtension.objects.create(days=days)
-        self.borrow_extension = extension
-        return extension
 
     def return_book(self) -> None:
         self.return_date = datetime.date.today()
@@ -164,7 +225,8 @@ class Borrow(models.Model):
 
     def clean(self):
         if Borrow.objects.filter(book_copy=self.book_copy, return_date=None).exists() and self.return_date is None:
-            if Borrow.objects.get(book_copy=self.book_copy, return_date=None) != self:
+            if Borrow.objects.get(book_copy=self.book_copy,
+                                  return_date=None) != self:
                 raise ValidationError('Wypożyczono już tą książkę')
 
     def save(self, *args, **kwargs):
@@ -178,9 +240,26 @@ class Borrow(models.Model):
 
 
 class Notification(models.Model):
+    """
+    Klasa reprezentuje powiadomienie
+
+    Attributes
+    ----------
+    user : User
+        Użytkownik, do którego skierowane jest powiadomienie
+    book_copy : BookCopy
+        Egzemplarz książki, którego dodtyczy wypożyczenie
+    date : datetime.date
+        Data wysłania
+    message : str
+        Treść powiadomienia
+    read : bool
+        Czy powiadomienie zostało odczytane?
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              verbose_name='Użytkownik')
-    book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE, verbose_name="Egzemplarz książki")
+    book_copy = models.ForeignKey(BookCopy, on_delete=models.CASCADE,
+                                  verbose_name="Egzemplarz książki")
     date = models.DateField(auto_now_add=True, verbose_name="Data")
     message = models.TextField(default='', verbose_name="Wiadomość")
     read = models.BooleanField(default=False, verbose_name="Czy odczytano?")
@@ -189,21 +268,38 @@ class Notification(models.Model):
         verbose_name = 'Powiadomienie'
         verbose_name_plural = 'Powiadomienia'
 
+    def __str__(self):
+        return "{} - {} - {}".format(self.user.username, self.date,
+                                     self.message)
+
     @classmethod
     def notify(cls) -> None:
         today_date = datetime.date.today()
 
         borrows = Borrow.objects.filter(return_date=None)
         for borrow in borrows:
-            if (today_date - borrow.borrow_date).days in (23, 27, 28, 29):
+            if (today_date - borrow.borrow_date).days in (23, 27, 28):
                 message = "Zostały ci {} dni do oddania książki {}".format(
                     30 - (today_date - borrow.borrow_date).days,
                     borrow.book_copy.book.title
                 )
                 cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
                                    message=message)
+            elif (today_date - borrow.borrow_date).days == 29:
+                message = "Został ci 1 dzień do oddania książki {}".format(
+                    borrow.book_copy.book.title
+                )
+                cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
+                                   message=message)
             elif (today_date - borrow.borrow_date).days == 30:
                 message = "Jutro musisz oddać książkę {}!".format(
+                    borrow.book_copy.book.title
+                )
+                cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
+                                   message=message)
+            elif (today_date - borrow.borrow_date).days > 30:
+                message = "Spóźniasz się {} dni z oddaniem książki {}".format(
+                    (today_date - borrow.borrow_date).days - 30,
                     borrow.book_copy.book.title
                 )
                 cls.objects.create(user=borrow.user, book_copy=borrow.book_copy,
