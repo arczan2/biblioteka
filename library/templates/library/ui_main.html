@@ -31,10 +31,10 @@
         <i class="fa fa-bars nav_btn"></i>
       </div>
       <div class="mobile_nav_items">
-       <a href="#"><i class="fas fa-table"></i><span>Wypożyczone książki</span></a>
-      <a href="#"><i class="fas fa-th"></i><span>Rezerwuj</span></a>
-      <a href="#"><i class="fas fa-info-circle"></i><span>Powiadomienia</span></a>
-      <a href="#"><i class="fas fa-sliders-h"></i><span>Ustawienia</span></a>
+        <a href="{% url "library:uimain" %}"><i class="fas fa-table"></i><span>Wypożyczone książki</span></a>
+          <a href="{% url "library:userbooks" %}"><i class="fas fa-th"></i><span>Wypożycz</span></a>
+      <a href="{% url "library:notifications" %}" class='{% has_notifications user %}'><i class="fas fa-info-circle"></i><span>Powiadomienia</span></a>
+      <a href="{% url "library:settings" %}"><i class="fas fa-sliders-h"></i><span>Ustawienia</span></a>
       </div>
     </div>
     <div class="sidebar">
@@ -42,7 +42,7 @@
         <h4>{{ user.username }}</h4>
       </div>
       <a href="{% url "library:uimain" %}"><i class="fas fa-table"></i><span>Wypożyczone książki</span></a>
-      <a href="{% url "library:userbooks" %}"><i class="fas fa-th"></i><span>Rezerwuj</span></a>
+      <a href="{% url "library:userbooks" %}"><i class="fas fa-th"></i><span>Wypożycz</span></a>
       <a href="{% url "library:notifications" %}" class='{% has_notifications user %}'><i class="fas fa-info-circle"></i><span>Powiadomienia</span></a>
       <a href="{% url "library:settings" %}"><i class="fas fa-sliders-h"></i><span>Ustawienia</span></a>
     </div>
