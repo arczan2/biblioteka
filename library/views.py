@@ -115,7 +115,7 @@ class RegistrationView(View):
         return render(request, 'library/registration.html', {'form': form})
 
 
-class UserBookListView(View):
+class UserBookListView(LoginRequiredMixin, View):
     """ Wyświetla listę książek """
     def get(self, request):
         # Znajdź wszystkie książki
@@ -134,7 +134,7 @@ class UserBookListView(View):
         return render(request, 'library/user_books.html', {'books': books})
 
 
-class UserBookDetailsView(View):
+class UserBookDetailsView(LoginRequiredMixin, View):
     """ Wyświetla informacje o książce """
     def get(self, request, id: int):
         user_borrow_count = Borrow.objects.filter(user=request.user,
@@ -145,7 +145,7 @@ class UserBookDetailsView(View):
                        "user_borrow_count": len(user_borrow_count)})
 
 
-class BorrowBookView(View):
+class BorrowBookView(LoginRequiredMixin, View):
     def get(self, request, id: int):
         book = Book.objects.get(pk=id)
         copies = BookCopy.objects.filter(book=book)
@@ -173,6 +173,7 @@ def genereate_notification(request):
     return HttpResponse('Wysłano powiadomienia')
 
 
+@login_required
 def read_notifictaion(request, id: int):
     """Oznacza powiadomienie jako przeczytane"""
     notification = Notification.objects.get(pk=id)
@@ -181,7 +182,7 @@ def read_notifictaion(request, id: int):
     return HttpResponseRedirect(reverse('library:notifications'))
 
 
-class SettingsView(View):
+class SettingsView(LoginRequiredMixin, View):
     """ Umożliwia zmianę hasła """
     def get(self, request):
         """ Wyświetla formularz zmiany hasła """
